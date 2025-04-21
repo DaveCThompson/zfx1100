@@ -1,0 +1,3273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZFX 1100</title> <!-- Title Updated -->
+    <!-- GSAP Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- GSAP TextPlugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <!-- Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Raleway:wght@600&display=swap" rel="stylesheet">
+    <style>
+  /* ==========================================================================
+     1. Base Variables & Global Styles
+     ========================================================================== */
+
+  :root {
+     /* --- 1.1 Layout & Spacing --- */
+     --semantic-space-xl: 1.5rem;
+     --semantic-space-m: 1rem;
+     --semantic-space-s-m: 0.75rem;
+     --semantic-space-s: 0.5rem;
+     --semantic-space-xs: 0.25rem;
+     --header-controls-gap: var(--semantic-space-s-m);
+     --panel-gap: 0rem;
+     --master-panel-padding: 0.5rem;
+     --line-width-thin: 0.0625rem; /* 1px */
+     --line-width-thick: 0.125rem; /* 2px */
+     --header-control-height: 2.625rem;
+     --logo-height: 1.5rem;
+
+     /* --- Slider Dimensions --- */
+     --slider-track-height-default: 0.125rem;
+     --slider-track-height-hover: 0.375rem;
+     --slider-thumb-height: 2rem;
+     --slider-thumb-width: 1.25rem;
+     --slider-track-radius: 0.375rem;
+     --slider-thumb-radius: 0.375rem;
+     --header-button-height: 2rem;
+
+     /* --- 1.2 Radii --- */
+     --semantic-radius-s: 0.25rem;
+     --semantic-radius-sm: 0.375rem;
+     --semantic-radius-m: 0.5rem;
+     --semantic-radius-l: 1rem;
+     --semantic-radius-lg: 1.5rem;
+     --semantic-radius-xl: 2.5rem;
+     --master-panel-radius: 3rem;
+
+     /* --- 1.3 Fonts --- */
+     --font-headings: 'Raleway', sans-serif;
+     --font-monospace: "IBM Plex Mono", monospace;
+     /* Sizes */
+     --title-medium-font-size: 1.75rem;
+     --label-medium-font-size: 1rem;
+     --label-small-font-size: 0.75rem;
+     --button-font-size: 0.8125rem;
+     --value-font-size: 0.8125rem;
+     --footer-font-size: 0.75rem;
+     /* Weights */
+     --title-font-weight: 600;
+     --label-font-weight: 600;
+     --button-font-weight: 600;
+     --value-font-weight: 500;
+
+     /* --- 1.4 Transitions (SLOWED DOWN) --- */
+     --transition-duration-fast: 0.2s;   /* Doubled */
+     --transition-duration-medium: 0.4s; /* Doubled */
+     --transition-duration-slow: 0.6s;   /* Doubled */
+     --transition-ease: ease;
+     --transition-ease-out: ease-out;
+     /* GSAP Specific Durations (SLOWED DOWN) */
+     --gsap-slider-click-duration: 0.16s;  /* Doubled */
+     --gsap-slider-icon-duration: 0.2s;   /* Doubled */
+     --gsap-slider-icon-ease: 'power1.out';
+     --gsap-slider-track-enter-duration: 0.2s; /* Doubled */
+     --gsap-slider-track-leave-duration: 0.2s; /* Doubled */
+     --gsap-slider-track-leave-ease: 'power2.out';
+
+     /* --- 1.5 Shadows --- */
+     --control-shadow: 0rem 0.125rem 0.3125rem 0rem rgba(0, 0, 0, 0.15);
+     --master-panel-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.10), 0px 4px 8px 0px rgba(0, 0, 0, 0.10), 0px 2px 4px 0px rgba(0, 0, 0, 0.10);
+     --slider-track-inset-shadow: inset 0rem 0.25rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
+     --slider-thumb-shadow: var(--control-shadow);
+
+     /* --- 1.6 Colors (Light Theme Defaults / Fallbacks) --- */
+     /* 1.6.1 Core Colors */
+     --body-bg-color: oklch(0.97 0.003 255); /* Default, overridden by themes */
+     --body-text-color: oklch(0.15 0 0);
+     --panel-border-color: oklch(0.89 0.02 255);
+     --panel-bg-base: oklch(0.96 0.01 255);
+     --panel-bg-elevated: oklch(1.00 0.00 0);
+     --panel-bg-sunken: oklch(0.93 0.01 255);
+     --panel-text-color: oklch(0.10 0.02 270);
+     --panel-label-color: oklch(0.10 0.02 270);
+     --secondary-text: oklch(0.34 0.1 255);
+     --faint-control-text: oklch(0.5 0.03 255);
+     --accent-color: oklch(0.51 0.08 255);
+
+     /* 1.6.2 Interaction Colors */
+     --interactive-bg: oklch(0.30 0.036 255 / 0.06);
+     --interactive-bg-hover: oklch(0.47 0.191 255 / 0.10);
+     --interactive-bg-pressed: oklch(0.42 0.191 255 / 0.10);
+     --toggle-active-shadow: var(--control-shadow);
+     --toggle-active-text: oklch(0.07 0.1 0);
+     --toggle-inactive-text: oklch(0.37 0.21 0);
+     --button-active-bg: oklch(1 0 0);
+     --dial-base-stroke: oklch(0.80 0 0);
+
+     /* 1.6.3 Component-Specific Colors */
+     --console-text-color: #333333;
+     --svg-bg-color: oklch(0.30 0.036 255 / 0.06);
+     --dot-resting-color: #333333;
+     --dot-hover-color: oklch(0.60 0.18 255);
+     --dot-sleep-color: oklch(0.78 0.03 270);
+     --grid-line-color: oklch(0.5 0.03 255 / 0.30);
+     --hover-indicator-color: oklch(1 0 0); /* Pure white for hover lines/circles */
+     --slider-track-gradient: linear-gradient(90deg, grey, lightgrey);
+     --theme-icon-light-fill: oklch(1 0 0);
+     --theme-icon-light-stroke: oklch(0.80 0.01 255);
+     --theme-icon-saturated-fill: oklch(0.7 0.25 var(--brand-hue));
+     --theme-icon-saturated-stroke: oklch(0.80 0.05 var(--brand-hue));
+     --theme-icon-dark-fill: oklch(0.27 0 0);
+     --theme-icon-dark-stroke: oklch(0.50 0.02 255);
+
+     /* 1.6.4 Master Panel Colors */
+     --master-panel-border-color: rgba(255, 255, 255, 1);
+     --master-panel-bg-color: rgba(255, 255, 255, 0.20);
+
+     /* --- 1.7 Brand Hue --- */
+     --brand-hue: 255;
+
+     /* --- 1.8 Slider State Variables (For JS/GSAP) --- */
+     --hue-slider-value-percent: 50%;
+     --slider-thumb-icon-grad: -25;
+     --slider-mask-height-factor: 1;
+
+     /* --- 1.9 Tap Button State Variables --- */
+     --tap-icon-grad: -25;
+ }
+
+ /* --- Saturated Theme Overrides --- */
+ body.saturated-theme-active {
+    --body-text-color: oklch(0 0 0);
+    --panel-text-color: oklch(0 0 0);
+    --panel-label-color: oklch(0 0 0);
+    --secondary-text: oklch(0.34 0.15 var(--brand-hue));
+    --faint-control-text: oklch(0.5 0.09 var(--brand-hue));
+    --toggle-active-text: oklch(0 0 0);
+    --toggle-inactive-text: oklch(0.20 0 0);
+    --dial-base-stroke: var(--panel-border-color);
+    --panel-bg-elevated: oklch(1.00 0.00 0);
+ }
+
+ /* --- Dark Theme Overrides --- */
+ body.dark-theme {
+     --body-text-color: oklch(0.88 0 0);
+     --panel-border-color: oklch(0.55 0.02 var(--brand-hue));
+     --panel-bg-base: oklch(0.22 0.01 var(--brand-hue));
+     --panel-bg-elevated: oklch(0.15 0.005 var(--brand-hue));
+     --panel-bg-sunken: oklch(0.15 0.00 var(--brand-hue));
+     --panel-text-color: oklch(0.88 0 0);
+     --panel-label-color: oklch(0.88 0 0);
+     --secondary-text: oklch(0.9 0.05 var(--brand-hue));
+     --faint-control-text: oklch(0.75 0.03 var(--brand-hue));
+     --control-shadow: 0rem 0.125rem 0.3125rem 0rem rgba(0, 0, 0, 0.3);
+     --toggle-active-shadow: var(--control-shadow);
+     --toggle-active-text: oklch(1 0 0);
+     --toggle-inactive-text: oklch(0.67 0 0);
+     --button-active-bg: oklch(0.30 0.01 var(--brand-hue));
+     --dial-base-stroke: oklch(0.33 0 0);
+     --slider-thumb-shadow: var(--control-shadow);
+     --body-bg-color: oklch(0 0 0); /* Set body background to pure black */
+     --master-panel-border-color: rgba(255, 255, 255, 0.20); /* Adjusted for dark theme */
+     --master-panel-bg-color: rgba(255, 255, 255, 0.10); /* Adjusted for dark theme */
+ }
+
+ /* ==========================================================================
+    2. Base Element Styles
+    ========================================================================== */
+ body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--body-bg-color);
+    color: var(--body-text-color);
+    overflow-x: hidden;
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    transition: background-color var(--transition-duration-slow) var(--transition-ease), color var(--transition-duration-slow) var(--transition-ease);
+ }
+ /* Noise filter applied via pseudo-element */
+ body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: transparent;
+    filter: url(#noiseFilter);
+    z-index: -1;
+    pointer-events: none;
+ }
+ /* Remove noise filter specifically in dark mode */
+ body.dark-theme::before {
+    filter: none;
+ }
+
+ * {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+ }
+
+ /* ==========================================================================
+    3. Layout Containers
+    ========================================================================== */
+ #main-content-area {
+    margin-top: calc(4.375rem - var(--master-panel-padding)); /* Adjusts for potential header overlap */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: calc(34.375rem + 2 * var(--master-panel-padding));
+    padding: 0;
+ }
+ #master-panel-wrapper {
+    width: 100%;
+    padding: var(--master-panel-padding);
+    border-radius: var(--master-panel-radius);
+    border: 2px solid var(--master-panel-border-color);
+    background: var(--master-panel-bg-color);
+    box-shadow: var(--master-panel-shadow);
+    transition: border-color var(--transition-duration-slow) var(--transition-ease),
+                background-color var(--transition-duration-slow) var(--transition-ease);
+ }
+ #control-console-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--panel-gap);
+    width: 100%;
+    margin-bottom: 0;
+    overflow: hidden;
+    border-radius: var(--semantic-radius-xl);
+ }
+
+ /* ==========================================================================
+    4. Section Panels (Header, Display, Controls, Footer)
+    ========================================================================== */
+
+ /* --- 4.1 Header Section --- */
+ #header-section {
+    display: flex;
+    padding: var(--semantic-space-xl) var(--semantic-space-m) var(--semantic-space-m);
+    flex-direction: column;
+    align-items: center;
+    gap: var(--semantic-space-xl);
+    align-self: stretch;
+    border-radius: var(--semantic-radius-xl) var(--semantic-radius-xl) 0 0;
+    border: 1px solid var(--panel-border-color);
+    border-bottom-width: 1px; /* Explicitly set bottom border */
+    background-color: var(--panel-bg-elevated);
+    transition: background-color var(--transition-duration-slow) var(--transition-ease),
+                border-color var(--transition-duration-slow) var(--transition-ease),
+                opacity var(--transition-duration-slow) var(--transition-ease);
+ }
+ #master-title {
+    margin-bottom: 0;
+    cursor: default;
+    position: relative;
+    height: var(--logo-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ }
+ #master-title svg {
+    height: 100%;
+    width: auto;
+    display: block;
+ }
+ #master-title svg path,
+ #master-title svg rect {
+    fill: var(--secondary-text);
+    /* Fill transition handled by JS/GSAP */
+ }
+ #header-controls-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--header-controls-gap);
+    width: 100%;
+    align-self: stretch;
+ }
+ #header-controls-row > div {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 0; /* Prevent flex items from overflowing */
+    height: var(--header-control-height);
+ }
+
+ /* --- 4.2 Display Section (SVG + Console) --- */
+ #display-section {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background-color: var(--panel-bg-elevated);
+    border-radius: 0;
+    border-left: 1px solid var(--panel-border-color);
+    border-right: 1px solid var(--panel-border-color);
+    border-top: none;
+    border-bottom: 1px solid var(--panel-border-color);
+    padding: 0;
+    gap: 0;
+    transition: background-color var(--transition-duration-slow) var(--transition-ease),
+                border-color var(--transition-duration-slow) var(--transition-ease);
+    overflow: hidden; /* Clip contents */
+ }
+ #svg-container {
+    display: block; /* Remove potential inline spacing */
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    background-color: var(--svg-bg-color);
+    position: relative;
+    border: none;
+    border-radius: 0;
+    padding: var(--semantic-space-m);
+    transition: background-color var(--transition-duration-slow) var(--transition-ease),
+                opacity var(--transition-duration-slow) var(--transition-ease);
+ }
+ #console-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid var(--panel-border-color);
+    padding: var(--semantic-space-m);
+    background-color: var(--svg-bg-color);
+    transition: opacity var(--transition-duration-slow) var(--transition-ease),
+                background-color var(--transition-duration-slow) var(--transition-ease),
+                border-color var(--transition-duration-slow) var(--transition-ease);
+    position: relative;
+    z-index: 0; /* Ensure it's below absolutely positioned elements if any */
+    height: 5rem; /* Fixed height */
+    overflow-y: auto; /* Allow scrolling */
+ }
+ #console-panel #message-box-container {
+    display: flex;
+    align-items: flex-start;
+    align-self: stretch;
+    min-height: 0; /* Allow shrinking */
+    height: auto;
+    margin: 0;
+    gap: 0;
+ }
+ #message-box-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-monospace);
+    font-size: 0.8125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1rem;
+    color: var(--console-text-color);
+    background: none;
+    padding: 0;
+    min-height: 0;
+    overflow-y: visible; /* Let parent handle scroll */
+    white-space: pre-wrap; /* Preserve whitespace and wrap */
+    margin: 0;
+    transition: color var(--transition-duration-slow) var(--transition-ease);
+ }
+ #message-box-content div {
+    width: 100%; /* Ensure lines take full width */
+ }
+
+ /* --- 4.3 Control Section & Panels --- */
+ #control-section {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: var(--panel-gap);
+    align-self: stretch;
+    border-left: 1px solid var(--panel-border-color);
+    border-right: 1px solid var(--panel-border-color);
+    border-top: none;
+    border-bottom: none;
+    border-radius: 0;
+    overflow: visible; /* Allow shadows/hovers to extend */
+    background-color: var(--panel-bg-elevated); /* Match panel background */
+ }
+ .control-panel {
+    border: none;
+    border-radius: 0;
+    padding: var(--semantic-space-m);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--semantic-space-s);
+    background-color: var(--panel-bg-elevated);
+    transition: background-color var(--transition-duration-slow) var(--transition-ease);
+ }
+ #environment-panel, #hover-panel {
+    flex-grow: 1; /* Take available space */
+    flex-basis: 0; /* Start from 0 width */
+    min-width: 0; /* Allow shrinking */
+ }
+ #tap-panel {
+    flex-grow: 0;
+    flex-shrink: 0; /* Don't shrink */
+    flex-basis: auto; /* Size based on content */
+    width: 8.9375rem; /* Fixed width */
+ }
+ .panel-label {
+    color: var(--secondary-text);
+    font-family: var(--font-headings);
+    font-size: var(--label-medium-font-size);
+    font-weight: var(--label-font-weight);
+    line-height: 120%;
+    letter-spacing: 0.015rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    width: 100%;
+    margin-top: 0;
+    transition: color var(--transition-duration-slow) var(--transition-ease),
+                opacity var(--transition-duration-slow) var(--transition-ease);
+ }
+
+ /* --- 4.4 Footer Credit Section --- */
+ #footer-container {
+    padding: var(--semantic-space-m);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--panel-bg-elevated);
+    border-left: 1px solid var(--panel-border-color);
+    border-right: 1px solid var(--panel-border-color);
+    border-bottom: 1px solid var(--panel-border-color);
+    border-top: none; /* Ensure no top border */
+    border-radius: 0 0 var(--semantic-radius-xl) var(--semantic-radius-xl);
+    transition: background-color var(--transition-duration-slow) var(--transition-ease),
+                border-color var(--transition-duration-slow) var(--transition-ease);
+ }
+ #footer-credit {
+    display: inline-flex; /* Align icon and text */
+    align-items: center;
+    padding: var(--semantic-space-s) var(--semantic-space-m);
+    font-family: var(--font-headings);
+    font-size: var(--footer-font-size);
+    line-height: 1.5;
+    text-decoration: none;
+    white-space: nowrap;
+    color: var(--faint-control-text);
+    background-color: transparent;
+    border: none;
+    border-radius: var(--semantic-radius-m);
+    cursor: pointer;
+    transition: color var(--transition-duration-medium) var(--transition-ease),
+                background-color var(--transition-duration-medium) var(--transition-ease),
+                padding-left var(--transition-duration-medium) var(--transition-ease); /* Animate padding for icon */
+ }
+ #footer-credit:hover {
+    color: var(--secondary-text);
+    background-color: var(--interactive-bg-hover);
+    /* Adjust left padding to make space for the icon */
+    padding-left: calc(var(--semantic-space-m) + 1.125em + var(--semantic-space-xs));
+    padding-right: var(--semantic-space-m); /* Keep right padding consistent */
+ }
+ #footer-credit .footer-icon {
+    font-size: 1.125em; /* Relative to footer font size */
+    line-height: 1; /* Prevent extra vertical space */
+    opacity: 0;
+    width: 0;
+    margin-left: 0;
+    overflow: hidden; /* Hide icon until hover */
+    vertical-align: middle; /* Align with text */
+    pointer-events: none; /* Not interactive itself */
+    transition: opacity var(--transition-duration-medium) var(--transition-ease),
+                width var(--transition-duration-medium) var(--transition-ease),
+                margin-left var(--transition-duration-medium) var(--transition-ease);
+ }
+ #footer-credit:hover .footer-icon {
+    opacity: 1;
+    width: 1.125em; /* Make width match font-size */
+    margin-left: var(--semantic-space-xs); /* Add space between text and icon */
+    pointer-events: auto; /* Allow interaction if needed (though it's inside a link) */
+ }
+
+ /* ==========================================================================
+    5. Specific Components
+    ========================================================================== */
+
+ /* --- 5.1 Segmented Button / Toggles --- */
+ .segmented-button {
+    display: flex;
+    padding: 0.375rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 0.625rem;
+    background: var(--interactive-bg);
+    width: 100%;
+    height: 100%;
+    transition: background-color var(--transition-duration-medium) var(--transition-ease),
+                opacity var(--transition-duration-slow) var(--transition-ease);
+ }
+ .segmented-button button {
+    border-radius: var(--slider-thumb-radius); /* Match slider thumb */
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--faint-control-text);
+    font-weight: var(--button-font-weight);
+    transition: background-color var(--transition-duration-medium) var(--transition-ease),
+                color var(--transition-duration-medium) var(--transition-ease),
+                box-shadow var(--transition-duration-medium) var(--transition-ease),
+                font-weight var(--transition-duration-medium) var(--transition-ease);
+    flex-grow: 1; /* Distribute space evenly */
+    flex-basis: 0; /* Start from 0 width */
+    text-align: center;
+    white-space: nowrap;
+    height: var(--header-button-height);
+    /* Vertical padding calculated to center text */
+    padding: calc((var(--header-button-height) - 0.875rem * 1) / 2) 1.125rem; /* Assuming line-height ~1 */
+    display: inline-flex; /* For aligning icons/text */
+    align-items: center;
+    justify-content: center;
+    line-height: 1; /* Ensure consistent height */
+ }
+ .segmented-button button:not(.active):hover {
+    background: var(--interactive-bg-hover);
+    color: var(--accent-color);
+    font-weight: calc(var(--button-font-weight) + 50);
+ }
+ .segmented-button button.active {
+    background: var(--button-active-bg);
+    box-shadow: var(--toggle-active-shadow);
+    color: var(--toggle-active-text);
+    font-weight: var(--button-font-weight); /* Reset weight when active */
+    transition: background-color var(--transition-duration-slow) var(--transition-ease), /* Slower transition for active state change */
+                color var(--transition-duration-medium) var(--transition-ease),
+                box-shadow var(--transition-duration-medium) var(--transition-ease),
+                font-weight var(--transition-duration-medium) var(--transition-ease);
+ }
+ /* Specific adjustments for control panel toggles */
+ #environment-panel .segmented-button button,
+ #hover-panel .segmented-button button {
+    height: 2rem;
+    font-size: var(--button-font-size);
+    padding: calc((2rem - var(--button-font-size) * 1) / 2) 0.625rem;
+ }
+ /* Specific padding for theme/master toggles (likely due to icon content) */
+ #theme-toggle button,
+ #master-toggle button {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+ }
+ /* Theme Icon Styling */
+ .theme-icon-circle {
+    stroke-width: 0.125rem;
+    transform-origin: center;
+    transition: transform var(--transition-duration-fast) var(--transition-ease-out),
+                fill var(--transition-duration-medium) var(--transition-ease),
+                stroke var(--transition-duration-medium) var(--transition-ease);
+ }
+ .theme-icon-circle[data-theme-icon="light"] { fill: var(--theme-icon-light-fill); stroke: var(--theme-icon-light-stroke); }
+ .theme-icon-circle[data-theme-icon="saturated"] { fill: var(--theme-icon-saturated-fill); stroke: var(--theme-icon-saturated-stroke); }
+ .theme-icon-circle[data-theme-icon="dark"] { fill: var(--theme-icon-dark-fill); stroke: var(--theme-icon-dark-stroke); }
+
+ #theme-toggle button:not(.active) .theme-icon-circle {
+     transform: scale(0.75); /* Shrink inactive icons */
+ }
+ #theme-toggle button:not(.active):hover .theme-icon-circle {
+     transform: scale(1); /* Grow on hover */
+ }
+ #theme-toggle button.active .theme-icon-circle {
+     transform: scale(1); /* Ensure active is full size */
+ }
+
+/* --- 5.2 Hue Slider (GSAP Version) --- */
+#hue-slider-container {
+    background: var(--interactive-bg);
+    border-radius: 0.625rem;
+    padding: 0.375rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: background-color var(--transition-duration-slow) var(--transition-ease),
+                opacity var(--transition-duration-slow) var(--transition-ease);
+    cursor: pointer;
+ }
+
+ .hue-slider-track {
+    width: 100%;
+    height: var(--slider-track-height-hover); /* Use hover height as base */
+    background: var(--slider-track-gradient);
+    border-radius: var(--slider-track-radius);
+    position: relative;
+    cursor: inherit; /* Inherit cursor from container */
+    transition: box-shadow var(--transition-duration-medium) var(--transition-ease);
+    /* Masking effect variable */
+    --slider-mask-height-factor: 1; /* 1 = fully masked to default height, 0 = fully revealed */
+ }
+
+ /* Masking pseudo-elements to create the thinner default track appearance */
+ .hue-slider-track::before,
+ .hue-slider-track::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    /* Calculate height of the mask based on factor */
+    height: calc(((var(--slider-track-height-hover) - var(--slider-track-height-default)) / 2) * var(--slider-mask-height-factor));
+    background-color: var(--panel-bg-elevated); /* Match panel background */
+    transition: background-color var(--transition-duration-slow) var(--transition-ease);
+    z-index: 1; /* Above track gradient, below thumb */
+    pointer-events: none;
+ }
+ .hue-slider-track::before {
+    top: 0;
+    border-radius: var(--slider-track-radius) var(--slider-track-radius) 0 0;
+ }
+ .hue-slider-track::after {
+    bottom: 0;
+    border-radius: 0 0 var(--slider-track-radius) var(--slider-track-radius);
+ }
+
+ /* Vertical hover line indicator */
+ .hue-slider-hover-line {
+    position: absolute;
+    top: 0;
+    left: 50%; /* Default position, updated by JS */
+    width: var(--line-width-thick);
+    height: 100%;
+    background-color: var(--hover-indicator-color); /* Use indicator color */
+    opacity: 0; /* Hidden by default */
+    pointer-events: none;
+    transition: opacity var(--transition-duration-fast) var(--transition-ease),
+                background-color var(--transition-duration-slow) var(--transition-ease); /* Allow theme transition */
+    z-index: 0; /* Below mask elements */
+ }
+
+ .hue-slider-thumb-container {
+    position: absolute;
+    /* Center vertically within the hover track height */
+    top: calc((var(--slider-track-height-hover) - var(--slider-thumb-height)) / 2);
+    /* Position horizontally based on variable, centered */
+    left: var(--hue-slider-value-percent);
+    transform: translateX(-50%);
+    width: var(--slider-thumb-width);
+    height: var(--slider-thumb-height);
+    cursor: pointer;
+    z-index: 2; /* Above track and mask */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .hue-slider-thumb {
+    width: 100%;
+    height: 100%;
+    background-color: var(--button-active-bg); /* Match active button bg */
+    border-radius: var(--slider-thumb-radius);
+    box-shadow: var(--slider-thumb-shadow);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Clip icon if needed */
+    transition: background-color var(--transition-duration-slow) var(--transition-ease),
+                box-shadow var(--transition-duration-medium) var(--transition-ease);
+ }
+
+ .hue-slider-thumb .thumb-icon {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal; font-style: normal;
+    font-size: 1.2rem; line-height: 1;
+    letter-spacing: normal; text-transform: none;
+    display: inline-block; white-space: nowrap; word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    color: var(--accent-color);
+    transform: rotate(90deg); /* Point icon vertically */
+    /* Use variable for GRAD animation */
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' var(--slider-thumb-icon-grad, -25), 'opsz' 20;
+    cursor: inherit; /* Inherit cursor from container */
+ }
+
+ /* --- 5.3 Action Button (Tap Panel) --- */
+ .action-button {
+    display: flex;
+    padding: 0.34375rem var(--semantic-space-s);
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem; /* Space between icon and text */
+    flex: 1 0 0; /* Grow, don't shrink, start at 0 */
+    align-self: stretch; /* Fill height */
+    border-radius: var(--semantic-radius-s);
+    border: 1px solid var(--panel-border-color);
+    background: var(--interactive-bg);
+    color: var(--accent-color);
+    cursor: pointer;
+    font-size: var(--button-font-size);
+    font-weight: var(--button-font-weight);
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: var(--toggle-active-shadow); /* Use toggle shadow */
+    transition: transform var(--transition-duration-fast) var(--transition-ease),
+                box-shadow var(--transition-duration-fast) var(--transition-ease),
+                color var(--transition-duration-medium) var(--transition-ease),
+                opacity var(--transition-duration-slow) var(--transition-ease),
+                background-color var(--transition-duration-medium) var(--transition-ease),
+                border-color var(--transition-duration-medium) var(--transition-ease),
+                font-weight var(--transition-duration-medium) var(--transition-ease);
+    /* Variable for icon GRAD animation */
+    --tap-icon-grad: -25;
+ }
+ .action-button .material-symbols-outlined {
+    font-size: 1rem;
+    color: inherit; /* Match button text color */
+    position: relative;
+    top: 0.0625rem; /* Slight vertical adjustment */
+    /* Use variable for GRAD animation */
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' var(--tap-icon-grad, -25), 'opsz' 20;
+    transition: color var(--transition-duration-medium) var(--transition-ease),
+                font-variation-settings var(--transition-duration-medium) var(--transition-ease-out);
+ }
+
+ .action-button:not(:disabled):hover {
+     background: var(--interactive-bg-hover);
+     color: var(--secondary-text);
+     font-weight: calc(var(--button-font-weight) + 50);
+     --tap-icon-grad: 300; /* Animate icon GRAD on hover */
+ }
+
+ .action-button:not(:disabled):active {
+    transform: scale(0.96); /* Press down effect */
+    background-color: var(--interactive-bg-pressed);
+    color: var(--secondary-text);
+    box-shadow: none; /* Remove shadow when pressed */
+    font-weight: calc(var(--button-font-weight) + 50);
+    --tap-icon-grad: 350; /* Further animate icon GRAD */
+ }
+ .action-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    background-color: var(--interactive-bg); /* Reset background */
+    color: var(--toggle-inactive-text); /* Use inactive text color */
+    font-weight: var(--button-font-weight); /* Reset font weight */
+    --tap-icon-grad: -25; /* Reset icon GRAD */
+ }
+
+ /* --- 5.4 Dial Controls --- */
+ .dial-area {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0.25rem;
+    transition: opacity var(--transition-duration-slow) var(--transition-ease);
+ }
+ .dial-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 4.0625rem; /* Fixed width for layout */
+ }
+ .dial-label {
+    font-size: var(--label-small-font-size);
+    color: var(--faint-control-text);
+    margin-bottom: 0.375rem;
+    text-align: center;
+    white-space: nowrap;
+    transition: color var(--transition-duration-slow) var(--transition-ease);
+ }
+ .dial-svg-container {
+    width: 3.75rem;
+    height: 3.75rem;
+    margin-bottom: 0.25rem;
+    position: relative; /* For potential absolute positioning inside */
+ }
+ .dial-svg {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    overflow: visible; /* Allow filter effects to extend */
+    transition: opacity var(--transition-duration-slow) var(--transition-ease);
+ }
+ .dial-svg:active {
+    cursor: pointer; /* Indicate grabbable state */
+ }
+ .dial-base {
+    stroke: var(--dial-base-stroke);
+    stroke-width: 0.03125; /* Very thin stroke */
+    fill: var(--interactive-bg);
+    filter: url(#dial-filter); /* Apply shadow filter */
+    transition: fill var(--transition-duration-medium) var(--transition-ease),
+                stroke var(--transition-duration-slow) var(--transition-ease);
+ }
+ .dial-svg:hover .dial-base {
+    fill: var(--interactive-bg-hover); /* Change fill on hover */
+ }
+ .dial-indicator {
+    stroke: var(--accent-color);
+    stroke-width: 3;
+    stroke-linecap: round;
+    transition: stroke var(--transition-duration-fast) var(--transition-ease);
+ }
+ .dial-division { /* Tick marks */
+    stroke: var(--accent-color);
+    stroke-linecap: round;
+    transition: stroke var(--transition-duration-fast) var(--transition-ease);
+ }
+ .dial-value-display {
+    font-family: var(--font-monospace);
+    font-size: var(--value-font-size);
+    font-weight: var(--value-font-weight);
+    color: var(--secondary-text);
+    text-align: center;
+    min-width: 1.875rem; /* Ensure space for text */
+    margin-top: 0.125rem;
+    transition: color var(--transition-duration-slow) var(--transition-ease);
+ }
+ /* Add degree symbol specifically for waveDirection */
+ .dial-value-display[data-value-id="waveDirection"]::after {
+    content: '°';
+ }
+
+ /* --- 5.5 SVG Element Styling --- */
+ #interactive-svg circle:not(.cursor-circle):not(.pop-ring) {
+    pointer-events: none; /* Make grid dots non-interactive directly */
+ }
+ /* SVG hover circle indicator */
+  #interactive-svg .cursor-circle {
+    fill: none;
+    stroke: var(--secondary-text); /* Use the same color as the logo text */
+    stroke-width: 0.125; /* SVG units */
+    pointer-events: none;
+    opacity: 0; /* Hidden by default */
+    transition: opacity var(--transition-duration-medium) var(--transition-ease-out),
+                stroke var(--transition-duration-medium) var(--transition-ease); /* Allow theme transition */
+ }
+ #interactive-svg.mouse-over .cursor-circle {
+    opacity: 1; /* Show when mouse is over SVG */
+ }
+ /* Pop effect rings */
+ #interactive-svg .pop-ring {
+    fill: none;
+    pointer-events: none;
+ }
+ /* Grid lines */
+ #interactive-svg #grid-lines-group line {
+    stroke: var(--grid-line-color);
+    stroke-width: 0.35; /* SVG units */
+    pointer-events: none;
+    transition: stroke var(--transition-duration-medium) var(--transition-ease);
+ }
+
+ /* ==========================================================================
+    6. Utility Styles (Sleep Mode)
+    ========================================================================== */
+ body.app-sleeping .dimmable-content {
+    opacity: 0.4;
+    pointer-events: none; /* Disable interactions on dimmed content */
+    transition: opacity var(--transition-duration-slow) var(--transition-ease);
+ }
+ /* Ensure master toggle remains interactive in sleep mode */
+ body.app-sleeping #master-toggle {
+    opacity: 1;
+    pointer-events: auto;
+ }
+ body.app-sleeping #master-toggle button {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+ }
+ /* Logo opacity handled separately by JS */
+ /* Explicitly disable hue slider interaction in sleep mode */
+ body.app-sleeping #hue-slider-container {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: default !important;
+ }
+ body.app-sleeping .hue-slider-track,
+ body.app-sleeping .hue-slider-thumb-container {
+    cursor: default !important;
+ }
+ /* Ensure other controls also get default cursor in sleep */
+ body.app-sleeping .dimmable-content :is(button, input[type=range], .dial-svg) {
+    cursor: default !important;
+ }
+ /* Keep footer potentially interactive (e.g., link) */
+ body.app-sleeping #footer-container {
+    pointer-events: auto;
+ }
+ body.app-sleeping #footer-credit {
+    pointer-events: auto;
+    cursor: default; /* But show default cursor */
+ }
+
+ /* ==========================================================================
+    7. Responsive Design (Mobile)
+    ========================================================================== */
+ @media (max-width: 500px) {
+      :root {
+          /* Adjust sizes for smaller screens */
+          --header-control-height: 2.125rem;
+          --logo-height: 1rem;
+          --slider-track-height-default: 0.125rem;
+          --slider-track-height-hover: 0.25rem;
+          --slider-thumb-height: 1.375rem;
+          --slider-thumb-width: 1.125rem;
+          --header-button-height: 1.75rem;
+      }
+      /* --- 7.1 Layout Containers --- */
+      body {
+          padding: var(--semantic-space-m); /* Add padding around the body */
+      }
+      #main-content-area {
+          margin-top: 0; /* Remove top margin */
+          max-width: 100%; /* Allow full width */
+      }
+      #master-panel-wrapper {
+          padding: var(--semantic-space-xs); /* Reduce padding */
+          border-radius: calc(var(--semantic-radius-xl) + var(--semantic-space-xs)); /* Adjust radius */
+          border-width: 1px; /* Thinner border */
+      }
+      #control-console-frame {
+          gap: var(--panel-gap);
+          border-radius: var(--semantic-radius-xl);
+      }
+
+      /* --- 7.2 Header Section --- */
+      #header-section {
+          padding: var(--semantic-space-s);
+          padding-top: var(--semantic-space-xl); /* Keep top padding */
+          border-radius: var(--semantic-radius-xl) var(--semantic-radius-xl) 0 0;
+          border-bottom-width: 1px; /* Ensure bottom border */
+      }
+      #header-controls-row {
+          gap: var(--header-controls-gap);
+      }
+
+      /* Mobile Slider Adjustments */
+      #hue-slider-container {
+          padding: 0.375rem 0.5rem; /* Reduce padding */
+      }
+      .hue-slider-thumb-container {
+          /* Recalculate vertical position based on smaller dimensions */
+          top: calc((var(--slider-track-height-hover) - var(--slider-thumb-height)) / 2);
+      }
+      .hue-slider-thumb .thumb-icon {
+          font-size: 1rem; /* Smaller icon */
+      }
+
+       /* Mobile Segmented Button Adjustments */
+      .segmented-button button {
+          height: var(--header-button-height); /* Use smaller height */
+          font-size: 0.8125rem; /* Slightly smaller font */
+          /* Recalculate padding */
+          padding: calc((var(--header-button-height) - 0.8125rem * 1) / 2) 1.125rem;
+      }
+       /* Disable hover font-weight change on mobile (touch devices) */
+       .segmented-button button:not(.active):hover,
+       .action-button:not(:disabled):hover,
+       .action-button:not(:disabled):active {
+           font-weight: var(--button-font-weight);
+       }
+
+      #theme-toggle button,
+      #master-toggle button {
+          padding-left: 0.4rem; /* Adjust padding */
+          padding-right: 0.4rem;
+      }
+      /* Keep control panel button sizes consistent */
+      #environment-panel .segmented-button button,
+      #hover-panel .segmented-button button {
+          height: 2rem;
+          font-size: var(--button-font-size);
+          padding: calc((2rem - var(--button-font-size) * 1) / 2) 0.625rem;
+      }
+      /* Keep theme icons small on mobile, even on hover */
+      #theme-toggle button:not(.active) .theme-icon-circle,
+      #theme-toggle button:not(.active):hover .theme-icon-circle {
+          transform: scale(0.75);
+      }
+
+      /* --- 7.3 Display Section --- */
+      #display-section {
+          /* Ensure borders are consistent */
+          border-left: 1px solid var(--panel-border-color);
+          border-right: 1px solid var(--panel-border-color);
+          border-top: none;
+          border-bottom: 1px solid var(--panel-border-color);
+          border-radius: 0;
+          padding: 0;
+      }
+      #svg-container {
+          padding: var(--semantic-space-s); /* Reduce padding */
+          border-radius: 0;
+          border: none;
+      }
+      #console-panel {
+          padding: var(--semantic-space-s); /* Reduce padding */
+          border-radius: 0;
+          border: none;
+          border-top: 1px solid var(--panel-border-color); /* Keep top border */
+      }
+
+      /* --- 7.4 Control Section & Panels --- */
+      #control-section {
+          flex-direction: column; /* Stack panels vertically */
+          gap: var(--panel-gap);
+          border: none; /* Remove side borders */
+          border-radius: 0;
+      }
+      .control-panel {
+          width: 100%; /* Full width */
+          flex-basis: auto; /* Height based on content */
+          flex-grow: 0;
+          border-radius: 0;
+          /* Add side borders now they are stacked */
+          border-left: 1px solid var(--panel-border-color);
+          border-right: 1px solid var(--panel-border-color);
+          border-top: none;
+          border-bottom: none; /* Let next panel add top border if needed */
+      }
+      /* Reorder and style Tap Panel for mobile */
+      #tap-panel {
+          order: 2; /* Place below Environment */
+          width: 100%;
+          flex-direction: row; /* Buttons side-by-side */
+          gap: var(--semantic-space-s);
+          padding: var(--semantic-space-s); /* Consistent padding */
+          padding-top: 0; /* Remove top padding */
+          border-top: 1px solid var(--panel-border-color); /* Add border between Env and Tap */
+      }
+      #environment-panel {
+          order: 1; /* First panel */
+          padding: var(--semantic-space-s);
+          border-bottom: none; /* Tap panel adds the border below */
+      }
+      #hover-panel {
+          order: 3; /* Last panel */
+          display: none; /* Hide Hover panel entirely on mobile */
+      }
+
+      /* --- 7.5 Footer --- */
+       #footer-container {
+           padding: var(--semantic-space-s) var(--semantic-space-xl); /* Adjust padding */
+           border-top: 1px solid var(--panel-border-color); /* Add border above footer */
+       }
+       #footer-credit {
+           padding: var(--semantic-space-s); /* Reduce padding */
+       }
+       #footer-credit:hover {
+           /* Adjust hover padding for icon */
+           padding-left: calc(var(--semantic-space-s) + 1.125em + var(--semantic-space-xs));
+           padding-right: var(--semantic-space-s);
+       }
+
+      /* --- 7.6 Component Adjustments --- */
+      /* Tap Panel Buttons: Icon only */
+      #tap-panel .action-button {
+          flex-grow: 1; flex-basis: 0; /* Equal width */
+          padding: var(--semantic-space-xs); /* Minimal padding */
+          min-width: 0; /* Allow shrinking */
+      }
+      #tap-panel .action-button .button-text {
+          display: none; /* Hide text */
+      }
+      #tap-panel .action-button .material-symbols-outlined {
+          font-size: 1.25rem; /* Larger icon */
+          margin-right: 0; /* No margin needed */
+      }
+      /* Hide dials and labels on mobile */
+      #environment-panel .dial-area {
+          display: none;
+      }
+      #environment-panel .panel-label,
+      #tap-panel .panel-label {
+          display: none;
+      }
+ }
+    </style>
+</head>
+<body>
+    <!-- Hidden SVG for filter definitions -->
+    <svg width="0" height="0" style="position:absolute;overflow:hidden;">
+        <defs>
+            <filter id="dial-filter" x="-30%" y="-30%" width="160%" height="160%" filterUnits="objectBoundingBox" color-interpolation-filters="sRGB"> <feFlood flood-opacity="0" result="BackgroundImageFix"/> <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha1"/> <feOffset dy="2"/> <feGaussianBlur stdDeviation="2"/> <feComposite in2="hardAlpha1" operator="out"/> <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.1 0"/> <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/> <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha2"/> <feOffset dy="4"/> <feGaussianBlur stdDeviation="4"/> <feComposite in2="hardAlpha2" operator="out"/> <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.1 0"/> <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow"/> <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha3"/> <feOffset dy="8"/> <feGaussianBlur stdDeviation="8"/> <feComposite in2="hardAlpha3" operator="out"/> <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.1 0"/> <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow"/> <feMerge> <feMergeNode in="effect3_dropShadow"/> <feMergeNode in="SourceGraphic"/> </feMerge> </filter>
+            <filter id='noiseFilter'> <feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/> <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0" /> </filter>
+        </defs>
+    </svg>
+
+    <div id="main-content-area">
+        <div id="master-panel-wrapper">
+            <div id="control-console-frame">
+                <!-- Header Section -->
+                <div id="header-section">
+                    <div id="master-title">
+                        <!-- SVG Logo -->
+                        <svg id="dfx-logo-svg" width="225" height="40" viewBox="0 0 225 40" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M36 0H2L0 8H25L0 32V40H34L36 32H11L36 8V0Z"/>
+                            <path d="M41.2109 0V40H49.2559V24.1104H65.5488V16.0635H49.2559V8.04688H72.3594L82.4297 20L65.5488 40H76.0586L87.7734 26.1729L99.3984 40H109.998L93.0879 20L109.998 0H99.3984L87.7734 13.8271L76.1758 0H41.2109Z"/>
+                            <path d="M113.111 12.3545H106.611L117.482 0H123.982V40H118.982V5L113.111 12.3545Z"/>
+                            <path d="M129 12.3545H135.5L141.371 5V40H146.371V0H139.871L129 12.3545Z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M192.547 0.84082C191.605 1.57324 191 2.71582 191 4V36C191 38.209 192.791 40 195 40H221C223.209 40 225 38.209 225 36V4C225 1.79102 223.209 0 221 0H195C194.076 0 193.225 0.313477 192.547 0.84082ZM220 5H196V35H220V5Z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M152 4C152 1.79102 153.791 0 156 0H182C184.209 0 186 1.79102 186 4V36C186 38.209 184.209 40 182 40H156C153.791 40 152 38.209 152 36V4ZM157 5H181V35H157V5Z"/>
+                        </svg>                        <!-- END SVG Logo -->
+                    </div>
+                    <div id="header-controls-row">
+                         <div><div id="master-toggle" class="segmented-button"> <button data-master-mode="sleep">OFF</button> <button data-master-mode="activated" class="active">ON</button> </div></div>
+                         <div>
+                             <div id="hue-slider-container" class="dimmable-content">
+                                 <div class="hue-slider-track" id="hue-track">
+                                     <div class="hue-slider-hover-line" id="hue-hover-line"></div>
+                                     <div class="hue-slider-thumb-container" id="hue-thumb-container">
+                                         <div class="hue-slider-thumb" id="hue-thumb">
+                                             <span class="material-symbols-outlined thumb-icon" id="thumb-icon">drag_handle</span>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div><div id="theme-toggle" class="segmented-button dimmable-content"> <button data-theme="light" class="active"> <svg viewBox="0 0 20 20" width="1rem" height="1rem" aria-label="Light Theme" focusable="false"> <circle cx="10" cy="10" r="8" class="theme-icon-circle" data-theme-icon="light"/> </svg> </button> <button data-theme="saturated"> <svg viewBox="0 0 20 20" width="1rem" height="1rem" aria-label="Saturated Theme" focusable="false"> <circle cx="10" cy="10" r="8" class="theme-icon-circle" data-theme-icon="saturated"/> </svg> </button> <button data-theme="dark"> <svg viewBox="0 0 20 20" width="1rem" height="1rem" aria-label="Dark Theme" focusable="false"> <circle cx="10" cy="10" r="8" class="theme-icon-circle" data-theme-icon="dark"/> </svg> </button> </div></div>
+                    </div>
+                </div>
+
+                <!-- Display Section -->
+                <div id="display-section">
+                    <div id="svg-container" class="dimmable-content"> <svg id="interactive-svg"></svg> </div>
+                    <div id="console-panel" class="dimmable-content"> <div id="message-box-container"> <pre id="message-box-content"></pre> </div> </div>
+                </div>
+
+                 <!-- Control Section -->
+                 <div id="control-section">
+                    <div id="environment-panel" class="control-panel">
+                         <h4 class="panel-label dimmable-content">Environment</h4>
+                         <div class="segmented-button dimmable-content" id="effect-type-toggle"> <button data-effect-type="sparkle" class="active">Sparkle</button> <button data-effect-type="wave">Wave</button> </div>
+                         <div class="dial-area dimmable-content" id="effect-dials">
+                             <div class="dial-container" data-effect-type="wave"> <span class="dial-label">Direction</span> <div class="dial-svg-container"> <svg class="dial-svg" data-dial-id="waveDirection" viewBox="-15 -15 70 70"> <circle class="dial-base" cx="20" cy="20" r="18" /> <g class="dial-decorations"></g> <g class="dial-indicator-group" transform-origin="20 20"> <line class="dial-indicator" x1="20" y1="20" x2="36" y2="20"/> </g> </svg> </div> <span class="dial-value-display" data-value-id="waveDirection"></span> </div>
+                             <div class="dial-container" data-effect-type="wave"> <span class="dial-label">Power</span> <div class="dial-svg-container"> <svg class="dial-svg" data-dial-id="waveSize" viewBox="-15 -15 70 70"> <circle class="dial-base" cx="20" cy="20" r="18" /> <g class="dial-decorations"></g> <g class="dial-indicator-group" transform-origin="20 20"> <line class="dial-indicator" x1="20" y1="20" x2="36" y2="20"/> </g> </svg> </div> <span class="dial-value-display" data-value-id="waveSize"></span> </div>
+                             <div class="dial-container" data-effect-type="sparkle"> <span class="dial-label">Frequency</span> <div class="dial-svg-container"> <svg class="dial-svg" data-dial-id="sparkleFreq" viewBox="-15 -15 70 70"> <circle class="dial-base" cx="20" cy="20" r="18" /> <g class="dial-decorations"></g> <g class="dial-indicator-group" transform-origin="20 20"> <line class="dial-indicator" x1="20" y1="20" x2="36" y2="20"/> </g> </svg> </div> <span class="dial-value-display" data-value-id="sparkleFreq"></span> </div>
+                             <div class="dial-container" data-effect-type="sparkle"> <span class="dial-label">Power</span> <div class="dial-svg-container"> <svg class="dial-svg" data-dial-id="sparkleSize" viewBox="-15 -15 70 70"> <circle class="dial-base" cx="20" cy="20" r="18" /> <g class="dial-decorations"></g> <g class="dial-indicator-group" transform-origin="20 20"> <line class="dial-indicator" x1="20" y1="20" x2="36" y2="20"/> </g> </svg> </div> <span class="dial-value-display" data-value-id="sparkleSize"></span> </div>
+                         </div>
+                     </div>
+                     <div id="tap-panel" class="control-panel">
+                         <h4 class="panel-label dimmable-content" id="tap-label">Tap</h4>
+                         <button id="tap-button" class="action-button dimmable-content"> <span class="material-symbols-outlined" id="bomb-icon">bomb</span> <span class="button-text">Bomb</span> </button>
+                          <button id="jiggle-button" class="action-button dimmable-content"> <span class="material-symbols-outlined" id="shake-icon">earthquake</span> <span class="button-text">Shake</span> </button>
+                          <button id="wave-tap-button" class="action-button dimmable-content"> <span class="material-symbols-outlined">adjust</span> <span class="button-text">Pulse</span> </button>
+                     </div>
+                     <div id="hover-panel" class="control-panel">
+                          <h4 class="panel-label dimmable-content">Mouse Hover</h4>
+                          <div class="segmented-button dimmable-content" id="hover-type-toggle"> <button data-hover-type="repel" class="active">Repel</button> <button data-hover-type="attract">Attract</button> </div>
+                          <div class="dial-area dimmable-content" id="hover-dials">
+                              <div class="dial-container"> <span class="dial-label">Falloff</span> <div class="dial-svg-container"> <svg class="dial-svg" data-dial-id="hoverFalloff" viewBox="-15 -15 70 70"> <circle class="dial-base" cx="20" cy="20" r="18" /> <g class="dial-decorations"></g> <g class="dial-indicator-group" transform-origin="20 20"> <line class="dial-indicator" x1="20" y1="20" x2="36" y2="20"/> </g> </svg> </div> <span class="dial-value-display" data-value-id="hoverFalloff"></span> </div>
+                              <div class="dial-container"> <span class="dial-label" id="hover-power-label">Power</span> <div class="dial-svg-container"> <svg class="dial-svg" data-dial-id="hoverPower" viewBox="-15 -15 70 70"> <circle class="dial-base" cx="20" cy="20" r="18" /> <g class="dial-decorations"></g> <g class="dial-indicator-group" transform-origin="20 20"> <line class="dial-indicator" x1="20" y1="20" x2="36" y2="20"/> </g> </svg> </div> <span class="dial-value-display" data-value-id="hoverPower"></span> </div>
+                          </div>
+                     </div>
+                </div>
+
+                <!-- Footer Credit Section -->
+                <div id="footer-container">
+                    <a id="footer-credit" href="https://davethompson.design" target="_blank" rel="noopener noreferrer">
+                        <span class="footer-text">Made with love. Happy Birthday Zara!</span>
+                        <span class="material-symbols-outlined footer-icon">open_in_new</span>
+                    </a>
+                </div>
+
+            </div> <!-- END control-console-frame -->
+        </div> <!-- END master-panel-wrapper -->
+    </div> <!-- END main-content-area -->
+
+    <script>
+    // Immediately Invoked Function Expression (IIFE) to encapsulate the code
+    (() => {
+        'use strict';
+
+        // ==========================================================================
+        // 1. Configuration & Message Strings (SLOWED DOWN VERSION)
+        // ==========================================================================
+
+        // --- Application Configuration ---
+        const config = {
+            TARGET_SVG_WIDTH: 500, VIEWBOX_PADDING_UNITS: 50, DOT_DIAMETER_INITIAL: 4,
+            INITIAL_HOVER_MODE: 'repel', INITIAL_HOVER_FALLOFF: 60, INITIAL_ATTRACT_POWER: 4, INITIAL_REPEL_POWER: 4,
+            ANIMATION_DURATION_HOVER_POS: 0.4, /* Doubled */ ANIMATION_DURATION_LEAVE: 0.6, /* Doubled */
+            INITIAL_ACTIVE_EFFECT: 'sparkle',
+            // Wave (Slowed)
+            INITIAL_WAVE_DIRECTION_ANGLE: 60, INITIAL_WAVE_SIZE_INCREASE: 6.0, INITIAL_WAVE_SPEED_FACTOR: 4.0,
+            WAVE_EXPAND_DURATION: 0.4, /* Doubled */ WAVE_SHRINK_DELAY: 0.1, /* Doubled */ WAVE_SHRINK_DURATION: 0.6, /* Doubled */
+            BASE_WAVE_CROSS_DURATION: 1.5, /* Doubled */ WAVE_REPEAT_DELAY: 4, /* Doubled */
+            // Sparkle (Slowed)
+            INITIAL_SPARKLE_SIZE_INCREASE: 6.0, INITIAL_SPARKLE_FREQUENCY: 0.75, /* Halved */
+            SPARKLE_BASE_DURATION: 0.8, /* Doubled */ SPARKLE_BASE_DELAY: 0.2, /* Doubled */
+            SPARKLE_MIN_DURATION_FACTOR: 0.8, SPARKLE_MAX_DURATION_FACTOR: 1.2, SPARKLE_MIN_DELAY_FACTOR: 0, SPARKLE_MAX_DELAY_FACTOR: 0.5,
+            // Tap Effects (Slowed)
+            POP_DURATION: 1.2, /* Doubled */ POP_FINAL_RADIUS: 45, POP_STROKE_WIDTH: 1.5, POP_INITIAL_OPACITY: 0.9, RING_HUE_INCREMENT: 30,
+            SHAKE_AMOUNT: 16, SHAKE_DURATION: 0.6, /* Doubled */ SHAKE_DELAY_MAX: 0.2, /* Doubled */
+            PULSE_DURATION: 1.2, /* Doubled */ PULSE_MAX_RADIUS_INCREASE: 4, PULSE_MAX_Y_DISPLACEMENT: 12, PULSE_TOTAL_STAGGER: 0.8, /* Doubled */
+            // Intro (Slowed)
+            INTRO_ANIM_DURATION: 1.6, /* Doubled */ INTRO_ANIM_STAGGER: 0.01, /* Doubled */ INTRO_ANIM_RANDOM_DELAY: 0.6, /* Doubled */
+            // Dials
+            DIAL_ANGLE_MIN: 0, DIAL_ANGLE_MAX: 360, DIAL_WAVE_SIZE_MIN: 1, DIAL_WAVE_SIZE_MAX: 11, DIAL_SPARKLE_SIZE_MIN: 1, DIAL_SPARKLE_SIZE_MAX: 11, DIAL_SPARKLE_FREQ_MIN: 0.5, DIAL_SPARKLE_FREQ_MAX: 2.5, DIAL_FALLOFF_MIN: 20, DIAL_FALLOFF_MAX: 420, DIAL_POWER_MIN: 1, DIAL_POWER_MAX: 11,
+            // Internal Mappings
+            WAVE_SIZE_INTERNAL_MIN: 1, WAVE_SIZE_INTERNAL_MAX: 5, SPARKLE_SIZE_INTERNAL_MIN: 0.5, SPARKLE_SIZE_INTERNAL_MAX: 4.5, HOVER_POWER_INTERNAL_MIN: 10, HOVER_POWER_INTERNAL_MAX: 200,
+            // Dial Physics
+            DIAL_ANGLE_PHYSICAL_MIN: 120, DIAL_ANGLE_PHYSICAL_MAX: 60, DIAL_TOTAL_ANGLE_RANGE: 300,
+            // Misc
+            EPSILON: 1e-6, GRID_SPACING: 20, SATURATED_HOVER_LIGHTNESS_INCREASE: 0.2, SATURATED_HOVER_CHROMA_INCREASE: 0.1,
+            HUE_UPDATE_DEBOUNCE: 300, /* Doubled */
+            // Hue Ranges
+            HUE_RANGES: {
+                red: { min: 0, max: 40, key: 'hueRed' }, orange: { min: 40, max: 70, key: 'hueOrange' }, yellow: { min: 70, max: 110, key: 'hueYellow' }, green: { min: 110, max: 160, key: 'hueGreen' }, cyan: { min: 160, max: 210, key: 'hueCyan' }, blue: { min: 210, max: 290, key: 'hueBlue' }, purple: { min: 290, max: 360, key: 'huePurple' }
+            },
+            HUE_CHANGE_THRESHOLD: 5,
+
+            // NOTE: Master Panel Gradient CSS uses --brand-hue set by JS, but other gradient params below are not dynamically controlled by this JS.
+            MASTER_PANEL_GRADIENT_ENABLED: true, // Set to false to disable (in CSS if needed)
+            MASTER_PANEL_GRADIENT_SPEED: 8,      // Rotation duration in seconds (slower = 8s) - CSS controlled
+            MASTER_PANEL_GRADIENT_HUE_L: 0.85,   // Lightness of the hue-based color stop (0-1) - CSS controlled
+            MASTER_PANEL_GRADIENT_HUE_C: 0.15,   // Chroma (saturation) of the hue-based color stop - CSS controlled
+            MASTER_PANEL_GRADIENT_NEUTRAL: 'oklch(0.95 0.01 0)', // Neutral color (e.g., light grey) - CSS controlled
+
+            // Logo Animation (Slowed Flicker/Oscillation)
+            LOGO_DIM_OPACITY: 0.4,
+            LOGO_FLICKER_DURATION: 0.06, /* Halved for speed */
+            LOGO_FLICKER_COUNT: 7,     /* Increased */
+            LOGO_OSCILLATE_DURATION: 5.0,
+            LOGO_OSCILLATE_OPACITY_MIN: 0.95,
+        };
+
+        const appMessages = {
+            startup: ["ZFX 1100 Online", "Happy 11th Birthday, Zara!", "System Activated for Awesome", "Ready for Birthday Fun!"],
+            sleep: ["Entering sleep mode", "System standby...", "Powering down like Neo napping", "Goodnight, amazing Zara!"],
+            activate: ["System activated!", "Waking up for the birthday girl!", "Effects online!", "Let's get interactive, Zara!"],
+            hueRed: ["Feeling fiery red!", "Hawaiian sunset red", "Warming things up like Mexico!", "Hue: Hibiscus Red"],
+            hueOrange: ["Orange hues selected", "Like Neo's Abyssinian Gold Color", "Sunset over Kona", "Hue: Tropical Orange"],
+            hueYellow: ["Sunshine yellow active!", "Golden Hawaiian sun", "Bright like Zara!", "Hue: Pineapple Yellow"],
+            hueGreen: ["Going green!", "Lush Mexico jungle", "Emerald ocean depths", "Hue: Tropical Leaf Green"],
+            hueCyan: ["Cool cyan selected", "Crystal clear swimming pool", "Ocean currents", "Hue: Aqua Marine"],
+            hueBlue: ["Deep blue spectrum", "Where the Mantas glide", "Pacific Ocean blue", "Hue: Deep Sea Blue"],
+            huePurple: ["Purple power!", "Majestic like a Manta Ray", "Violet vacation vibes", "Hue: Orchid Purple"],
+            bomb: ["Shomen tsuki!", "Kiai!", "Problem Solved!", "Hajime!", "Big Splash!", "Cannon ball", "Neo Pounce!"], // Karate, Math, Swimming, Manta, Cat themes
+            shake: ["Shake it!", "Kihon Kata Shuffle!", "Ocean waves!", "Purrfect rumble!", "Hajime!"], // Karate, Ocean, Cat themes
+            pulse: ["Focus pulse!", "Ocean energy propagating", "Calculating...", "Signal sent!", "Heartbeat of awesome!"], // Karate, Ocean, Math themes
+            effectWave: ["Ocean waves online", "Manta glide effect", "Swimming through pixels", "Beach mode activated"], // Ocean, Manta, Swimming themes
+            effectSparkle: ["Make it sparkle!", "Birthday confetti!", "Shine bright like Zara!", "Neo's chasing the dots!"], // Birthday, General, Cat themes
+            hoverAttract: ["Come closer!", "Neo wants cuddles!", "Gentle current pulling in", "Attraction mode: ON"], // Cat, Ocean themes
+            hoverRepel: ["Keep distance!", "Karate block!", "Making space like a Manta", "Repulsion mode: ENGAGED"], // Karate, Manta themes
+            themeLight: ["Sunny theme set", "Bright like a Hawaiian day!", "Day mode"],
+            themeSaturated: ["Saturated theme active", "Vibrant vacation colors!", "Chroma boost!"],
+            themeDark: ["Deep ocean theme", "Stargazing night over the water", "Night mode"],
+            dialMax: ["Setting to 11! Happy Birthday!", "Maximum Power!", "Limit Reached!", "Full Karate Power!", "Top Math Score!"], // Birthday, Karate, Math themes
+            dialMin: ["Nice and easy", "Minimum reached", "Gentle Manta glide", "Lowest setting", "Chill swim mode"], // Manta, Swimming themes
+            dialIncreaseGeneric: ["Parameter increased", "Boosting level!", "Turning it up!", "More awesome!"],
+            dialDecreaseGeneric: ["Parameter decreased", "Lowering level", "Dialing it back", "Less intensity"],
+            dialIncreaseFreq: ["Frequency up", "Faster swim strokes!", "Increasing rate", "fast snap for Grandpa", "Quicker Karate moves!"], // Swimming, Karate themes
+            dialDecreaseFreq: ["Frequency down", "Slower swim strokes", "Decreasing rate", "Slowing it down for Gradma", "Slowing down the Kata"], // Swimming, Karate themes
+            directionEast: ["Heading East", "Towards the Atlantic?"],
+            directionSouth: ["Flying South", "Mexico direction!"],
+            directionWest: ["Go West", "Aloha direction!"], // Hawaii theme
+            directionNorth: ["Traveling North", "North Shore waves?"], // Hawaii theme
+            directionGeneral: ["This way!", "Direction changed", "New heading set", "Let's go this way, Zara!"]
+        };
+        // ==========================================================================
+        // 2. Theme Definitions
+        // ==========================================================================
+        const themes = {
+             light: {
+                 name: 'Light', cssClass: '', messageKey: 'themeLight',
+                 bodyBg: { l: 0.97, c: 0.003, hueSensitive: true }, bodyTextColor: { l: 0.15, c: 0.00, h: 0 },
+                 panelBgBase: { l: 0.96, c: 0.01, h: 0, hueSensitive: true }, panelBgElevated: { l: 1.00, c: 0.00, h: 0 },
+                 panelBgSunken: { l: 0.93, c: 0.01, h: 0, hueSensitive: true }, panelBorder: { l: 0.89, c: 0.02, hueSensitive: true },
+                 panelText: { l: 0.10, c: 0.02, h: 270 }, panelLabel: { l: 0.10, c: 0.02, h: 270 },
+                 toggleActiveText: { l: 0.07, c: 0.1, h: 0 }, toggleInactiveText: { l: 0.37, c: 0.21, h: 0 },
+                 dialBaseStroke: { l: 0.80, c: 0.00, h: 0 },
+                 gridLine: { l: 0.5, c: 0.13, a: 0.30, hueSensitive: true }, dotSleep: { l: 0.78, c: 0.03, h: 270, hueSensitive: false },
+                 accent: { l: 0.51, c: 0.08, hueSensitive: true }, interactiveBg: { l: 0.30, c: 0.036, a: 0.06, hueSensitive: true },
+                 interactiveBgHover: { l: 0.47, c: 0.191, a: 0.10, hueSensitive: true }, interactiveBgPressed:{ l: 0.42, c: 0.191, a: 0.10, hueSensitive: true },
+                 svgBg: { l: 0.30, c: 0.036, a: 0.06, hueSensitive: true },
+                 dotHover: { l: 0.60, c: 0.18, hueSensitive: true }, bombRing: { l: 0.80, c: 0.23, hueSensitive: true },
+                 dotRestingColor: '#333333',
+                 themeIconLightFill: { l: 1.00, c: 0.00, h: 0 }, themeIconLightStroke: { l: 0.40, c: 0.01, h: 255 },
+                 themeIconSaturatedFill:{ l: 0.70, c: 0.25, hueSensitive: true }, themeIconSaturatedStroke:{ l: 0.60, c: 0.25, hueSensitive: true },
+                 themeIconDarkFill: { l: 0.27, c: 0.00, h: 0 }, themeIconDarkStroke: { l: 0.20, c: 0.02, h: 255 },
+                 faintControlText: { l: 0.5, c: 0.03, hueSensitive: true }, secondaryText: { l: 0.34, c: 0.1, hueSensitive: true },
+                 masterPanelBorder: 'rgba(255, 255, 255, 1)', masterPanelBg: 'rgba(255, 255, 255, 0.20)',
+             },
+             saturated: {
+                 name: 'Saturated', cssClass: 'saturated-theme-active', messageKey: 'themeSaturated',
+                 bodyBg: { l: 0.97, c: 0.016, hueSensitive: true }, bodyTextColor: { l: 0.00, c: 0.00, h: 0 },
+                 panelBgBase: { l: 0.95, c: 0.03, hueSensitive: true }, panelBgElevated: { l: 1.00, c: 0.00, h: 0 },
+                 panelBgSunken: { l: 0.92, c: 0.03, hueSensitive: true }, panelBorder: { l: 0.90, c: 0.05, hueSensitive: true },
+                 panelText: { l: 0.00, c: 0.00, h: 0 }, panelLabel: { l: 0.00, c: 0.00, h: 0 },
+                 toggleActiveText: { l: 0.00, c: 0.00, h: 0 }, toggleInactiveText: { l: 0.20, c: 0.00, h: 0 },
+                 gridLine: { l: 0.50, c: 0.03, a: 0.40, hueSensitive: true }, dotSleep: { l: 0.40, c: 0.10, hueSensitive: true },
+                 accent: { l: 0.40, c: 0.15, hueSensitive: true }, interactiveBg: { l: 0.50, c: 0.15, a: 0.10, hueSensitive: true },
+                 interactiveBgHover: { l: 0.47, c: 0.310, a: 0.10, hueSensitive: true }, interactiveBgPressed:{ l: 0.42, c: 0.310, a: 0.10, hueSensitive: true },
+                 svgBg: { l: 0.50, c: 0.15, a: 0.10, hueSensitive: true },
+                 dotHover: { l: 0.75, c: 0.26, hueSensitive: true }, bombRing: { l: 0.90, c: 0.23, hueSensitive: true }, dialBaseStroke: 'var(--panel-border-color)', // Uses CSS variable directly
+                 themeIconLightFill: { l: 1.00, c: 0.00, h: 0 }, themeIconLightStroke: { l: 0.80, c: 0.05, hueSensitive: true },
+                 themeIconSaturatedFill:{ l: 0.70, c: 0.25, hueSensitive: true }, themeIconSaturatedStroke:{ l: 0.20, c: 0.20, hueSensitive: true },
+                 themeIconDarkFill: { l: 0.30, c: 0.05, hueSensitive: true }, themeIconDarkStroke: { l: 0.50, c: 0.05, hueSensitive: true },
+                 faintControlText: { l: 0.5, c: 0.09, hueSensitive: true }, secondaryText: { l: 0.34, c: 0.15, hueSensitive: true },
+                 masterPanelBorder: 'rgba(255, 255, 255, 1)', masterPanelBg: 'rgba(255, 255, 255, 0.20)',
+             },
+             dark: {
+                 name: 'Dark', cssClass: 'dark-theme', messageKey: 'themeDark',
+                 bodyBg: { l: 0.25, c: 0.003, hueSensitive: true }, bodyTextColor: { l: 0.88, c: 0.00, h: 0 },
+                 panelBgBase: { l: 0.22, c: 0.01, h: 0, hueSensitive: true }, panelBgElevated: { l: 0.15, c: 0.001, h: 0 },
+                 panelBgSunken: { l: 0.15, c: 0.00, h: 0, hueSensitive: true }, panelBorder: { l: 0.55, c: 0.02, hueSensitive: true },
+                 panelText: { l: 0.88, c: 0.00, h: 0 }, panelLabel: { l: 0.88, c: 0.00, h: 0 },
+                 toggleActiveText: { l: 1.00, c: 0.00, h: 0 }, toggleInactiveText: { l: 0.67, c: 0.00, h: 0 },
+                 dialBaseStroke: { l: 0.33, c: 0.00, h: 0 },
+                 gridLine: { l: 0.45, c: 0.04, a: 0.75, hueSensitive: true }, dotSleep: { l: 0.33, c: 0.01, h: 270, hueSensitive: false },
+                 accent: { l: 0.82, c: 0.08, hueSensitive: true }, interactiveBg: { l: 0.70, c: 0.036, a: 0.06, hueSensitive: true },
+                 interactiveBgHover: { l: 0.53, c: 0.191, a: 0.10, hueSensitive: true }, interactiveBgPressed:{ l: 0.45, c: 0.20, a: 0.10, hueSensitive: true },
+                 svgBg: { l: 0.70, c: 0.036, a: 0.06, hueSensitive: true },
+                 dotHover: { l: 0.85, c: 0.20, hueSensitive: true }, /* INCREASED CHROMA */ bombRing: { l: 0.55, c: 0.23, hueSensitive: true },
+                 dotRestingColor: '#E0E0E0',
+                 themeIconLightFill: { l: 0.80, c: 0.00, h: 0 }, themeIconLightStroke: { l: 0.20, c: 0.01, h: 255 },
+                 themeIconSaturatedFill:{ l: 0.60, c: 0.20, hueSensitive: true }, themeIconSaturatedStroke:{ l: 0.2, c: 0.05, hueSensitive: true },
+                 themeIconDarkFill: { l: 0.18, c: 0.01, h: 0 }, themeIconDarkStroke: { l: 0.85, c: 0.02, h: 255 },
+                 faintControlText: { l: 0.75, c: 0.03, hueSensitive: true }, secondaryText: { l: 0.9, c: 0.1, hueSensitive: true },
+                 masterPanelBorder: 'rgba(255, 255, 255, 0.20)', masterPanelBg: 'rgba(255, 255, 255, 0.10)',
+             }
+         };
+
+        // ==========================================================================
+        // 3. Constants & Global State
+        // ==========================================================================
+        const constants = { SVG_NS: 'http://www.w3.org/2000/svg', DEG_TO_RAD: Math.PI / 180, };
+        const state = {
+            masterMode: 'activated', // 'activated' or 'sleep'
+            activeHoverMode: config.INITIAL_HOVER_MODE, // 'repel' or 'attract'
+            activeEffect: config.INITIAL_ACTIVE_EFFECT, // 'sparkle' or 'wave'
+            currentTheme: 'light',
+            brandHue: 255, // 0-360
+            isDraggingDial: false,
+            isDraggingSvg: false,
+            dragDialInfo: { element: null, center: { x: 0, y: 0 }, initialValue: null, hitMin: false, hitMax: false },
+            isMouseOverSvg: false,
+            waveTimeline: null, // GSAP timeline instance for wave effect
+            sparkleTweens: [], // Array of GSAP tween instances for sparkle effect
+            dots: [], // Array of dot objects { el, initialR, initialFill, hoverFill, currentFill, cx, cy }
+            messageLog: [], // Array of strings for the console display
+            // Dial-controlled state values (internal representation)
+            waveDirectionAngle: config.INITIAL_WAVE_DIRECTION_ANGLE,
+            waveSizeIncrease: mapRange(config.INITIAL_WAVE_SIZE_INCREASE, config.DIAL_WAVE_SIZE_MIN, config.DIAL_WAVE_SIZE_MAX, config.WAVE_SIZE_INTERNAL_MIN, config.WAVE_SIZE_INTERNAL_MAX),
+            sparkleFrequency: config.INITIAL_SPARKLE_FREQUENCY,
+            sparkleSizeIncrease: mapRange(config.INITIAL_SPARKLE_SIZE_INCREASE, config.DIAL_SPARKLE_SIZE_MIN, config.DIAL_SPARKLE_SIZE_MAX, config.SPARKLE_SIZE_INTERNAL_MIN, config.SPARKLE_SIZE_INTERNAL_MAX),
+            hoverFalloff: config.INITIAL_HOVER_FALLOFF,
+            hoverPower: mapRange(config.INITIAL_HOVER_MODE === 'repel' ? config.INITIAL_REPEL_POWER : config.INITIAL_ATTRACT_POWER, config.DIAL_POWER_MIN, config.DIAL_POWER_MAX, config.HOVER_POWER_INTERNAL_MIN, config.HOVER_POWER_INTERNAL_MAX),
+            currentRingHue: themes.light.bombRing?.h ?? 255, // Hue for the next bomb ring
+            resizeTimer: null, // Timer for debouncing resize events
+            hueUpdateTimer: null, // Timer for debouncing hue updates
+            isDraggingHueSlider: false,
+            hueSliderTrackRect: null, // Cached bounding rect for hue slider track
+            initialHueOnDragStart: 255, // Store hue when slider drag starts
+            messageIndices: {}, // Tracks next message index for each category
+            logoAnimationTimeline: null, // GSAP timeline for logo animations
+        };
+
+        // ==========================================================================
+        // 4. DOM References & Geometry
+        // ==========================================================================
+        const domRefs = {}; // Populated by populateDomRefs()
+        const geometry = {
+            gridCenter: { x: 0, y: 0 },
+            svgRect: null, // Bounding client rect of the SVG element
+            viewBoxParams: null, // Calculated viewBox attributes
+            ctmInverse: null, // Inverse of the screen CTM for coordinate conversion
+            scaleFactor: 1, // Scale factor from SVG units to target width
+        };
+
+        // ==========================================================================
+        // 5. Helper Functions
+        // ==========================================================================
+        function degreesToRadians(d) { return d * constants.DEG_TO_RAD; }
+        function radiansToDegrees(r) { return r * (180 / Math.PI); }
+        function getWaveDistanceMetric(x, y, angleRad) { const wx = Math.cos(angleRad), wy = Math.sin(angleRad); return x * wx + y * wy; }
+        function distance(x1, y1, x2, y2) { const dx = x1 - x2, dy = y1 - y2; return Math.sqrt(dx * dx + dy * dy); }
+        function clamp(v, min, max) { return Math.max(min, Math.min(v, max)); }
+        function mapRange(v, iMin, iMax, oMin, oMax) { if (Math.abs(iMax - iMin) < config.EPSILON) return oMin; return oMin + (oMax - oMin) * (v - iMin) / (iMax - iMin); }
+        // Maps a dial angle (0-360 physical) to a value within min/max, considering the dial's active range (non-360)
+        function angleToValue(angleDeg, valMin, valMax) { const physMin = config.DIAL_ANGLE_PHYSICAL_MIN; const range = config.DIAL_TOTAL_ANGLE_RANGE; angleDeg = (angleDeg % 360 + 360) % 360; let normalizedAngle = angleDeg - physMin; if (normalizedAngle < -config.EPSILON) { normalizedAngle += 360; } normalizedAngle = clamp(normalizedAngle, 0, range); return mapRange(normalizedAngle, 0, range, valMin, valMax); }
+        // Maps a value to a physical dial angle (0-360) within the dial's active range (non-360)
+        function valueToAngle(value, valMin, valMax) { const physMin = config.DIAL_ANGLE_PHYSICAL_MIN; const range = config.DIAL_TOTAL_ANGLE_RANGE; value = clamp(value, valMin, valMax); const normalizedAngle = mapRange(value, valMin, valMax, 0, range); let physicalAngle = (physMin + normalizedAngle) % 360; return physicalAngle; }
+        // Maps a full 0-360 angle to a value
+        function angleToValue360(a, valMin, valMax) { a = (a % 360 + 360) % 360; return mapRange(a, 0, 360, valMin, valMax); }
+        // Maps a value to a full 0-360 angle
+        function valueToAngle360(v, valMin, valMax) { v = clamp(v, valMin, valMax); return mapRange(v, valMin, valMax, 0, 360); }
+        function createSvgElement(type, attributes = {}) { const el = document.createElementNS(constants.SVG_NS, type); for (const [key, value] of Object.entries(attributes)) { el.setAttribute(key, value); } return el; }
+        const formatFloat = v => (typeof v === 'number' ? v.toFixed(1) : 'N/A');
+        const formatInt = v => (typeof v === 'number' ? Math.round(v) : 'N/A');
+        // Formats an OKLCH color object into a CSS string, optionally overriding the hue
+        function formatOklch(lcha, hue = null) { if (typeof lcha === 'string') return lcha; if (!lcha || typeof lcha.l !== 'number' || typeof lcha.c !== 'number') { console.warn("Invalid LCHA object:", lcha); return 'oklch(0 0 0)'; } const h = (typeof hue === 'number') ? hue.toFixed(1) : (typeof lcha.h === 'number' ? lcha.h.toFixed(1) : '0'); const l = lcha.l.toFixed(3); const c = lcha.c.toFixed(3); if (typeof lcha.a === 'number' && lcha.a < 1.0) { return `oklch(${l} ${c} ${h} / ${lcha.a.toFixed(2)})`; } else { return `oklch(${l} ${c} ${h})`; } }
+        // Clamps an angle to the physical min/max range of the non-360 dials
+        function getClampedAngle(angleDeg) { const physMin = config.DIAL_ANGLE_PHYSICAL_MIN; const physMax = config.DIAL_ANGLE_PHYSICAL_MAX; angleDeg = (angleDeg % 360 + 360) % 360; const isInDeadZone = angleDeg > physMax && angleDeg < physMin; if (isInDeadZone) { let distToMin = Math.abs(angleDeg - physMin); let distToMax = Math.abs(angleDeg - physMax); if (physMin > physMax) { distToMin = Math.min(Math.abs(angleDeg - physMin), Math.abs(angleDeg - physMin + 360)); distToMax = Math.min(Math.abs(angleDeg - physMax), Math.abs(angleDeg - physMax - 360)); } return distToMax <= distToMin ? physMax : physMin; } else { return angleDeg; } }
+        function getPointOnCircle(cx, cy, radius, angleDeg) { const angleRad = angleDeg * constants.DEG_TO_RAD; return { x: cx + radius * Math.cos(angleRad), y: cy + radius * Math.sin(angleRad) }; }
+        // Gets the next message from a category in appMessages cyclically
+        function getNextMessage(messageKey) {
+            const messages = appMessages[messageKey]; if (!Array.isArray(messages) || messages.length === 0) { console.warn(`getNextMessage: No messages found for key '${messageKey}'`); return `[${messageKey}...]`; }
+            const currentIndex = state.messageIndices[messageKey] || 0; const message = messages[currentIndex]; state.messageIndices[messageKey] = (currentIndex + 1) % messages.length; return message;
+        }
+        // Calculates color stops for the hue slider gradient based on theme
+        function calculateThemeGradientStops(themeName) { let l = 0.7, c = 0.12; if (themeName === 'saturated') { l = 0.70; c = 0.20; } else if (themeName === 'dark') { l = 0.70; c = 0.10; } const stops = []; const numStops = 12; for (let i = 0; i < numStops; i++) { const hue = (i * 360 / numStops); const percentage = (i / (numStops - 1)) * 100; stops.push(`oklch(${l.toFixed(3)} ${c.toFixed(3)} ${hue.toFixed(1)}) ${percentage.toFixed(2)}%`); } return stops; }
+        // Builds the CSS linear-gradient string for the hue slider track
+        function buildSliderTrackGradient(themeName) { try { const stops = calculateThemeGradientStops(themeName); return `linear-gradient(90deg, ${stops.join(', ')})`; } catch (error) { console.error("Error building slider gradient:", error); return 'linear-gradient(90deg, grey, lightgrey)'; } }
+        // Sets the fill color of a dot, optionally animating with GSAP
+        function setDotFill(dot, newFillColor, animate = false, duration = 0.1, ease = 'none') { if (!dot || !dot.el) { console.warn("setDotFill: Invalid dot"); return; } if (animate) { gsap.to(dot.el, { fill: newFillColor, duration: duration, ease: ease, overwrite: true, onStart: () => { if (dot) dot.currentFill = newFillColor; } }); } else { gsap.set(dot.el, { fill: newFillColor }); dot.currentFill = newFillColor; } }
+        // Resets a dot to its initial position and fill color, optionally animating
+        function resetDotToInitialVisuals(dot, animate = true, duration = config.ANIMATION_DURATION_LEAVE, ease = 'power2.out') { if (!dot || !dot.el || typeof dot.cx !== 'number' || typeof dot.cy !== 'number' || !dot.initialFill) { console.warn("resetDotToInitialVisuals: Invalid dot"); return; } const targetState = { attr: { cx: dot.cx, cy: dot.cy }, fill: dot.initialFill }; if (animate) { gsap.to(dot.el, { attr: targetState.attr, fill: targetState.fill, duration: duration, ease: ease, overwrite: "auto", onStart: () => { if (dot) dot.currentFill = dot.initialFill; } }); } else { gsap.set(dot.el, targetState); dot.currentFill = dot.initialFill; } }
+        // Scrolls the message box to the bottom
+        function updateMessageBoxScroll() { const container = domRefs.consolePanel; if (container) { container.scrollTop = container.scrollHeight; } }
+        // Adds a message to the log and updates the display
+        function logMessage(newMessage) { if (!domRefs.messageBoxContent) return; state.messageLog.push(`> ${newMessage}`); if (state.messageLog.length > 3) { state.messageLog.shift(); } updateMessageBox(); }
+        // Updates the message box content with a typing effect for the last message
+        function updateMessageBox() {
+            if (!domRefs.messageBoxContent) return;
+            const typingSpeedFactor = 0.030; /* Doubled */ const maxTypingDuration = 3.0; /* Doubled */
+            // Kill any previous typing animation on the last line
+            if (domRefs.messageBoxContent.lastChild) { gsap.killTweensOf(domRefs.messageBoxContent.lastChild, "text"); }
+            const fragment = document.createDocumentFragment(); let lastLineDiv = null;
+            // Build message lines with decreasing opacity for older messages
+            state.messageLog.forEach((line, index) => {
+                const lineDiv = document.createElement('div'); const isLastMessage = index === state.messageLog.length - 1; const age = state.messageLog.length - 1 - index; lineDiv.style.opacity = age === 0 ? 1 : (age === 1 ? 0.7 : 0.4);
+                if (isLastMessage) { lineDiv.textContent = ''; lastLineDiv = lineDiv; } else { lineDiv.textContent = line; }
+                fragment.appendChild(lineDiv);
+            });
+            domRefs.messageBoxContent.innerHTML = ''; domRefs.messageBoxContent.appendChild(fragment);
+            // Animate the last line if it exists
+            if (lastLineDiv && state.messageLog.length > 0) {
+                const lastLineText = state.messageLog[state.messageLog.length - 1]; const calculatedDuration = Math.min(lastLineText.length * typingSpeedFactor, maxTypingDuration);
+                gsap.to(lastLineDiv, { text: { value: lastLineText, delimiter: "" }, duration: calculatedDuration, ease: "none", onUpdate: updateMessageBoxScroll, onComplete: updateMessageBoxScroll });
+            } else { updateMessageBoxScroll(); } // Ensure scroll if no animation
+        }
+        // Utility to get a CSS variable value as a number
+        const getCssVarAsNumber = (varName) => { try { return parseFloat(getComputedStyle(document.documentElement).getPropertyValue(varName).trim()); } catch (e) { console.warn(`Could not parse CSS variable ${varName} as number.`); return 0; } };
+        // Determines the color category based on hue value
+        function getHueCategory(hueValue) {
+            const hue = (hueValue % 360 + 360) % 360;
+            for (const color in config.HUE_RANGES) { const range = config.HUE_RANGES[color]; if (hue >= range.min && hue < range.max) { return range.key; } }
+            if (Math.abs(hue - 360) < config.EPSILON || Math.abs(hue - 0) < config.EPSILON) { if (config.HUE_RANGES.red?.key) { return config.HUE_RANGES.red.key; } }
+            console.warn(`getHueCategory: Hue ${hue.toFixed(2)} did not fall into any defined range.`); let closestKey = null; let minDist = 360;
+            for (const color in config.HUE_RANGES) { const range = config.HUE_RANGES[color]; const dist = Math.min(Math.abs(hue - range.min), Math.abs(hue - range.max)); if (dist < minDist) { minDist = dist; closestKey = range.key; } }
+            return closestKey;
+        }
+        // Logs a message if the hue change crosses a threshold or category boundary
+        function logHueChange(initialHue, finalHue) {
+            const hueDiff = Math.abs(finalHue - initialHue);
+            if (hueDiff >= config.HUE_CHANGE_THRESHOLD || getHueCategory(finalHue) !== getHueCategory(initialHue)) {
+                const colorCategoryKey = getHueCategory(finalHue); if (colorCategoryKey) { logMessage(getNextMessage(colorCategoryKey)); }
+            }
+        }
+        // Helper to stop current effect and log message for tap actions
+        function _startTapEffect(messageKey) {
+            stopCurrentEffect();
+            logMessage(getNextMessage(messageKey));
+        }
+
+        // ==========================================================================
+        // 6. Data Definitions
+        // ==========================================================================
+        // Coordinates for each dot in the grid (SVG units)
+// ==========================================================================
+        // 6. Data Definitions - Updated with new SVG coordinates (snapped to grid) - Corrected
+        // ==========================================================================
+        const dotCoordinates = [
+            [6, 86], [6, 426], [6, 446], [26, 46], [26, 66], [26, 86], [26, 386],
+            [26, 406], [26, 426], [26, 446], [46, 6], [46, 26], [46, 46], [46, 66],
+            [46, 86], [46, 366], [46, 386], [46, 406], [46, 426], [46, 446], [66, 6],
+            [66, 26], [66, 46], [66, 66], [66, 86], [66, 346], [66, 366], [66, 386],
+            [66, 406], [66, 426], [66, 446], [86, 6], [86, 26], [86, 46], [86, 66],
+            [86, 86], [86, 326], [86, 346], [86, 366], [86, 386], [86, 406], [86, 426],
+            [86, 446], [106, 6], [106, 26], [106, 46], [106, 66], [106, 86], [106, 306],
+            [106, 326], [106, 346], [106, 366], [106, 386], [106, 406], [106, 426],
+            [106, 446], [126, 6], [126, 26], [126, 46], [126, 66], [126, 86], 
+            [126, 286], [126, 306], [126, 326], [126, 346], [126, 366], [126, 386],
+            [126, 406], [126, 426], [126, 446], [146, 6], [146, 26], [146, 46], [146, 66],
+            [146, 86], [146, 266], [146, 286], [146, 306], [146, 326], [146, 346],
+            [146, 366], [146, 386], [146, 406], [146, 426], [146, 446], [166, 6],
+            [166, 26], [166, 46], [166, 66], [166, 86], [166, 246], [166, 266], [166, 286],
+            [166, 306], [166, 326], [166, 346], [166, 366], [166, 386], [166, 406],
+            [166, 426], [166, 446], [186, 6], [186, 26], [186, 46], [186, 66], [186, 86],
+            [186, 226], [186, 246], [186, 266], [186, 286], [186, 306], [186, 326],
+            [186, 366], [186, 386], [186, 406], [186, 426], [186, 446], [206, 6],
+            [206, 26], [206, 46], [206, 66], [206, 86], [206, 206], [206, 226], [206, 246],
+            [206, 266], [206, 286], [206, 306], [206, 366], [206, 386], [206, 406],
+            [206, 426], [206, 446], [226, 6], [226, 26], [226, 46], [226, 66], [226, 86],
+            [226, 186], [226, 206], [226, 226], [226, 246], [226, 266], [226, 286],
+            [226, 366], [226, 386], [226, 406], [226, 426], [226, 446], [246, 6],
+            [246, 26], [246, 46], [246, 66], [246, 86], [246, 166], [246, 186], [246, 206],
+            [246, 226], [246, 246], [246, 266], [246, 366], [246, 386], [246, 406],
+            [246, 426], [246, 446], [266, 6], [266, 26], [266, 46], [266, 66], [266, 86],
+            [266, 146], [266, 166], [266, 186], [266, 206], [266, 226], [266, 246],
+            [266, 366], [266, 386], [266, 406], [266, 426], [266, 446], [286, 6],
+            [286, 26], [286, 46], [286, 66], [286, 86], [286, 126], [286, 146], [286, 166],
+            [286, 186], [286, 206], [286, 226], [286, 366], [286, 386], [286, 406],
+            [286, 426], [286, 446], [306, 6], [306, 26], [306, 46], [306, 66], [306, 86],
+            [306, 106], [306, 126], [306, 146], [306, 166], [306, 186], [306, 206],
+            [306, 366], [306, 386], [306, 406], [306, 426], [306, 446], [326, 6],
+            [326, 26], [326, 46], [326, 66], [326, 86], [326, 106], [326, 126], [326, 146],
+            [326, 166], [326, 186], [326, 366], [326, 386], [326, 406], [326, 426],
+            [326, 446], [346, 6], [346, 26], [346, 46], [346, 66], [346, 86], [346, 106],
+            [346, 126], [346, 146], [346, 166], [346, 366], [346, 386], [346, 406],
+            [346, 426], [346, 446], [366, 6], [366, 26], [366, 46], [366, 66], [366, 86],
+            [366, 106], [366, 126], [366, 146], [366, 366], [366, 386], [366, 406],
+            [366, 426], [366, 446], [386, 6], [386, 26], [386, 46], [386, 66], [386, 86],
+            [386, 106], [386, 126], [386, 366], [386, 386], [386, 406], [386, 426],
+            [386, 446], [406, 6], [406, 26], [406, 46], [406, 66], [406, 86], [406, 106],
+            [406, 366], [406, 386], [406, 406], [406, 426], [406, 446], [426, 6],
+            [426, 26], [426, 46], [426, 66], [426, 86], [426, 366], [426, 386], [426, 406],
+            [426, 426], [426, 446], [446, 6], [446, 26], [446, 46], [446, 66], [446, 366],
+            [446, 386], [446, 406], [466, 6], [466, 26], [466, 366]
+        ];        // Bounding box of the dot coordinates
+        const DATA_BOUNDS = { minX: 6, minY: 6, maxX: 466, maxY: 446, width: 460, height: 440 };
+        // Initial radius calculated from diameter
+        const dotRadiusInitial = config.DOT_DIAMETER_INITIAL / 2;
+        // Configuration mapping for each dial control
+        const dialConfigs = {
+            waveDirection: { stateProp: 'waveDirectionAngle', displayMin: config.DIAL_ANGLE_MIN, displayMax: config.DIAL_ANGLE_MAX, internalMin: config.DIAL_ANGLE_MIN, internalMax: config.DIAL_ANGLE_MAX, formatFn: formatInt, fullRange: true, needsEffectRestart: true, needsSvgRecalc: false },
+            waveSize: { stateProp: 'waveSizeIncrease', displayMin: config.DIAL_WAVE_SIZE_MIN, displayMax: config.DIAL_WAVE_SIZE_MAX, internalMin: config.WAVE_SIZE_INTERNAL_MIN, internalMax: config.WAVE_SIZE_INTERNAL_MAX, formatFn: formatFloat, fullRange: false, needsEffectRestart: true, needsSvgRecalc: false },
+            sparkleFreq: { stateProp: 'sparkleFrequency', displayMin: config.DIAL_SPARKLE_FREQ_MIN, displayMax: config.DIAL_SPARKLE_FREQ_MAX, internalMin: config.DIAL_SPARKLE_FREQ_MIN, internalMax: config.DIAL_SPARKLE_FREQ_MAX, formatFn: formatFloat, fullRange: false, needsEffectRestart: true, needsSvgRecalc: false },
+            sparkleSize: { stateProp: 'sparkleSizeIncrease', displayMin: config.DIAL_SPARKLE_SIZE_MIN, displayMax: config.DIAL_SPARKLE_SIZE_MAX, internalMin: config.SPARKLE_SIZE_INTERNAL_MIN, internalMax: config.SPARKLE_SIZE_INTERNAL_MAX, formatFn: formatFloat, fullRange: false, needsEffectRestart: true, needsSvgRecalc: false },
+            hoverFalloff: { stateProp: 'hoverFalloff', displayMin: config.DIAL_FALLOFF_MIN, displayMax: config.DIAL_FALLOFF_MAX, internalMin: config.DIAL_FALLOFF_MIN, internalMax: config.DIAL_FALLOFF_MAX, formatFn: formatInt, fullRange: false, needsEffectRestart: false, needsSvgRecalc: true },
+            hoverPower: { stateProp: 'hoverPower', displayMin: config.DIAL_POWER_MIN, displayMax: config.DIAL_POWER_MAX, internalMin: config.HOVER_POWER_INTERNAL_MIN, internalMax: config.HOVER_POWER_INTERNAL_MAX, formatFn: formatFloat, fullRange: false, needsEffectRestart: false, needsSvgRecalc: true }
+        };
+
+        // ==========================================================================
+        // 7. Core Initialization Functions
+        // ==========================================================================
+        // Populates the domRefs object with references to key elements
+        function populateDomRefs() {
+             const refs = {
+                 masterPanelWrapper: document.getElementById('master-panel-wrapper'),
+                 messageBoxContent: document.getElementById('message-box-content'),
+                 masterToggle: document.getElementById('master-toggle'),
+                 themeToggle: document.getElementById('theme-toggle'),
+                 hueSliderContainer: document.getElementById('hue-slider-container'),
+                 hueTrack: document.getElementById('hue-track'),
+                 hueThumbContainer: document.getElementById('hue-thumb-container'),
+                 hueThumb: document.getElementById('hue-thumb'),
+                 thumbIcon: document.getElementById('thumb-icon'),
+                 hueHoverLine: document.getElementById('hue-hover-line'),
+                 masterTitle: document.getElementById('master-title'),
+                 logoSvg: document.getElementById('dfx-logo-svg'),
+                 logoElements: null, // Populated after logoSvg is found
+                 svgElement: document.getElementById('interactive-svg'),
+                 svgContainer: document.getElementById('svg-container'),
+                 displaySection: document.getElementById('display-section'),
+                 tapButton: document.getElementById('tap-button'),
+                 jiggleButton: document.getElementById('jiggle-button'),
+                 waveTapButton: document.getElementById('wave-tap-button'),
+                 effectTypeToggle: document.getElementById('effect-type-toggle'),
+                 hoverTypeToggle: document.getElementById('hover-type-toggle'),
+                 consolePanel: document.getElementById('console-panel'),
+                 messageBoxContainer: document.getElementById('message-box-container'),
+                 footerContainer: document.getElementById('footer-container'),
+                 footerCredit: document.getElementById('footer-credit'),
+                 cursorGravityCircle: null, // Created dynamically
+                 waveControls: document.querySelectorAll('#effect-dials .dial-container[data-effect-type="wave"]'),
+                 sparkleControls: document.querySelectorAll('#effect-dials .dial-container[data-effect-type="sparkle"]'),
+             };
+             // Get logo elements after confirming logoSvg exists
+             if (refs.logoSvg) { refs.logoElements = refs.logoSvg.querySelectorAll('path, rect'); }
+             else { console.error("DOM Ref Error: Critical element 'dfx-logo-svg' not found."); }
+
+             // Dynamically add refs for dials, values, and indicators
+             document.querySelectorAll('[data-dial-id]').forEach(el => { refs[`dial_${el.dataset.dialId}`] = el; });
+             document.querySelectorAll('[data-value-id]').forEach(el => { refs[`value_${el.dataset.valueId}`] = el; });
+             document.querySelectorAll('.dial-indicator-group').forEach(el => {
+                 const dial = el.closest('.dial-svg');
+                 if (dial && dial.dataset.dialId) { refs[`indicator_${dial.dataset.dialId}`] = el; }
+             });
+
+             // Check if critical elements were found
+             const criticalKeys = ['masterPanelWrapper', 'svgElement', 'svgContainer', 'displaySection', 'masterToggle', 'themeToggle', 'hueSliderContainer', 'hueTrack', 'hueThumbContainer', 'hueThumb', 'thumbIcon', 'hueHoverLine', 'masterTitle', 'logoSvg', 'logoElements', 'messageBoxContent', 'consolePanel', 'messageBoxContainer', 'waveControls', 'sparkleControls', 'effectTypeToggle', 'hoverTypeToggle', 'tapButton', 'jiggleButton', 'waveTapButton', 'footerContainer', 'footerCredit'];
+             let refsOk = true;
+             for (const key of criticalKeys) {
+                 if (key && (!refs[key] || (refs[key] instanceof NodeList && refs[key].length === 0))) {
+                     console.error(`DOM Ref Error: Critical element '${key}' not found or empty.`);
+                     refsOk = false;
+                 }
+             }
+             // Check dial elements against config
+             if (typeof dialConfigs !== 'undefined') {
+                 for (const id in dialConfigs) {
+                     if (!refs[`dial_${id}`] || !refs[`indicator_${id}`] || !refs[`value_${id}`]) {
+                         console.warn(`DOM Ref Warning: Missing elements for dial '${id}'.`);
+                         // Don't set refsOk to false for non-critical dial parts, but warn.
+                     }
+                 }
+             } else { console.error("dialConfigs is not defined when checking refs!"); refsOk = false; }
+
+             if (!refsOk) throw new Error("Critical DOM elements required for initialization are missing.");
+
+             Object.assign(domRefs, refs); // Assign populated refs to the global domRefs object
+             return true;
+         }
+        // Creates the grid lines within the SVG
+        function createGridLines() {
+            if (!domRefs.svgElement) return;
+            const existingGroup = domRefs.svgElement.querySelector('#grid-lines-group');
+            if (existingGroup) existingGroup.remove(); // Remove old grid if exists
+
+            const gridGroup = createSvgElement('g', { id: 'grid-lines-group' });
+            const spacing = config.GRID_SPACING;
+
+            // Get unique X and Y coordinates from dots, sorted
+            let uniqueX = [...new Set(dotCoordinates.map(p => p[0]))].sort((a, b) => a - b);
+            let uniqueY = [...new Set(dotCoordinates.map(p => p[1]))].sort((a, b) => a - b);
+
+            // Define outer boundaries for grid lines (one spacing unit beyond data bounds)
+            const outerLineXBefore = DATA_BOUNDS.minX - spacing;
+            const outerLineXAfter = DATA_BOUNDS.maxX + spacing;
+            const outerLineYBefore = DATA_BOUNDS.minY - spacing;
+            const outerLineYAfter = DATA_BOUNDS.maxY + spacing;
+
+            // Combine unique coords with outer boundaries and sort
+            const allXCoords = [...new Set([outerLineXBefore, ...uniqueX, outerLineXAfter])].sort((a, b) => a - b);
+            const allYCoords = [...new Set([outerLineYBefore, ...uniqueY, outerLineYAfter])].sort((a, b) => a - b);
+
+            // Create vertical lines
+            allXCoords.forEach(x => {
+                gridGroup.appendChild(createSvgElement('line', { x1: x, y1: outerLineYBefore, x2: x, y2: outerLineYAfter }));
+            });
+            // Create horizontal lines
+            allYCoords.forEach(y => {
+                gridGroup.appendChild(createSvgElement('line', { x1: outerLineXBefore, y1: y, x2: outerLineXAfter, y2: y }));
+            });
+
+            domRefs.svgElement.prepend(gridGroup); // Add grid lines behind dots
+        }
+        // Sets up the main SVG element (viewBox, grid, cursor circle)
+        function setupSvg() {
+            if (!domRefs.svgElement || !state || !geometry) { console.error("setupSvg: Missing critical refs."); return; }
+
+            // Calculate viewBox dimensions based on data bounds and padding
+            const viewBoxWidth = DATA_BOUNDS.width + config.VIEWBOX_PADDING_UNITS * 2;
+            const viewBoxHeight = DATA_BOUNDS.height + config.VIEWBOX_PADDING_UNITS * 2;
+            geometry.scaleFactor = config.TARGET_SVG_WIDTH > 0 ? config.TARGET_SVG_WIDTH / viewBoxWidth : 1;
+            geometry.viewBoxParams = {
+                x: DATA_BOUNDS.minX - config.VIEWBOX_PADDING_UNITS,
+                y: DATA_BOUNDS.minY - config.VIEWBOX_PADDING_UNITS,
+                width: viewBoxWidth,
+                height: viewBoxHeight
+            };
+            domRefs.svgElement.setAttribute('viewBox', `${geometry.viewBoxParams.x} ${geometry.viewBoxParams.y} ${geometry.viewBoxParams.width} ${geometry.viewBoxParams.height}`);
+
+            // Calculate center of the grid
+            geometry.gridCenter.x = DATA_BOUNDS.minX + DATA_BOUNDS.width / 2;
+            geometry.gridCenter.y = DATA_BOUNDS.minY + DATA_BOUNDS.height / 2;
+
+            createGridLines();
+
+            // Create the cursor hover indicator circle if it doesn't exist
+            if (!domRefs.cursorGravityCircle) {
+                domRefs.cursorGravityCircle = createSvgElement('circle', { id: 'cursor-gravity-circle', class: 'cursor-circle', r: 10 }); // Initial radius, updated later
+                domRefs.svgElement.appendChild(domRefs.cursorGravityCircle);
+            }
+
+            // Defer CTM calculation until next frame to ensure layout is complete
+            requestAnimationFrame(() => {
+                try {
+                    geometry.svgRect = domRefs.svgElement.getBoundingClientRect();
+                    const ctm = domRefs.svgElement.getScreenCTM();
+                    if (!ctm) { throw new Error("setupSvg (rAF): Failed to get CTM."); }
+                    geometry.ctmInverse = ctm.inverse();
+                    if (!geometry.ctmInverse) { throw new Error("setupSvg (rAF): Failed to invert CTM."); }
+                } catch(rAFError) {
+                    console.error("Error inside setupSvg rAF callback:", rAFError);
+                    // Handle error appropriately, maybe disable interactions
+                }
+            });
+        }
+        // Creates the dot elements based on coordinates and theme colors
+        function createDots(initialFillColor, hoverFillColor) {
+            if (typeof dotRadiusInitial !== 'number' || isNaN(dotRadiusInitial) || dotRadiusInitial <= 0 || !domRefs.svgElement || !Array.isArray(dotCoordinates) || !gsap) { console.error("createDots: Preconditions failed."); return; }
+            if (typeof initialFillColor !== 'string' || !initialFillColor) { console.error(`createDots: Invalid initialFillColor: ${initialFillColor}. Using fallback.`); initialFillColor = '#FF0000'; }
+            if (typeof hoverFillColor !== 'string' || !hoverFillColor) { console.warn(`createDots: Invalid hoverFillColor: ${hoverFillColor}. Using initial.`); hoverFillColor = initialFillColor; }
+
+            stopCurrentEffect(); // Stop any running background animations
+
+            // Remove existing dots and kill their animations
+            state.dots.forEach(dot => {
+                if (dot?.el) {
+                    gsap.killTweensOf(dot.el);
+                    dot.el.remove();
+                }
+            });
+            state.dots = []; // Clear the dots array
+
+            const fragment = document.createDocumentFragment(); // Use fragment for performance
+            dotCoordinates.forEach((coord, index) => {
+                if (!Array.isArray(coord) || coord.length < 2 || typeof coord[0] !== 'number' || typeof coord[1] !== 'number') { console.warn(`createDots: Skipping invalid coord ${index}:`, coord); return; }
+                const [x, y] = coord;
+                const circle = createSvgElement('circle', { cx: x, cy: y, r: dotRadiusInitial, fill: initialFillColor });
+                // Store initial data on the element and in the state object
+                circle.dataset.cx = x;
+                circle.dataset.cy = y;
+                circle.dataset.initialR = dotRadiusInitial;
+                fragment.appendChild(circle);
+                state.dots.push({
+                    el: circle,
+                    initialR: dotRadiusInitial,
+                    initialFill: initialFillColor,
+                    hoverFill: hoverFillColor,
+                    currentFill: initialFillColor, // Track current fill for comparisons
+                    cx: x,
+                    cy: y
+                });
+            });
+            domRefs.svgElement.appendChild(fragment); // Add all new dots at once
+        }
+        // Creates the tick mark decorations for a dial SVG
+        function createTicks(dialSvgElement, isFullRange) {
+            const cx = 20, cy = 20; // Center of the dial SVG viewBox
+            const innerRadius = 18 + 8; // Radius for start of ticks
+            const outerRadius = innerRadius + 8; // Radius for end of ticks
+            const decorationsGroup = dialSvgElement.querySelector('.dial-decorations');
+            if (!decorationsGroup) return; // Ensure the group exists
+
+            decorationsGroup.innerHTML = ''; // Clear existing ticks
+            const fragment = document.createDocumentFragment();
+            const thickStrokeWidth = '2';
+            const thinStrokeWidth = '1';
+            const cardinalAngles = [0, 90, 180, 270]; // Angles for thicker ticks (if full range)
+
+            if (isFullRange) { // For 360-degree dials (e.g., direction)
+                const tickAngles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+                tickAngles.forEach(angle => {
+                    const p1 = getPointOnCircle(cx, cy, innerRadius, angle);
+                    const p2 = getPointOnCircle(cx, cy, outerRadius, angle);
+                    const strokeWidth = cardinalAngles.includes(angle) ? thickStrokeWidth : thinStrokeWidth;
+                    const tick = createSvgElement('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, class: 'dial-division', 'stroke-width': strokeWidth });
+                    fragment.appendChild(tick);
+                });
+            } else { // For limited-range dials (e.g., power, frequency)
+                const tickAngles = [120, 150, 180, 210, 240, 270, 300, 330, 0, 30, 60]; // Angles within the physical range
+                tickAngles.forEach(angle => {
+                    const p1 = getPointOnCircle(cx, cy, innerRadius, angle);
+                    const p2 = getPointOnCircle(cx, cy, outerRadius, angle);
+                    // Check if the angle corresponds to the min/max physical angle
+                    const isMin = Math.abs(angle - config.DIAL_ANGLE_PHYSICAL_MIN) < config.EPSILON;
+                    const isMax = Math.abs(angle - config.DIAL_ANGLE_PHYSICAL_MAX) < config.EPSILON;
+                    const strokeWidth = (isMin || isMax) ? thickStrokeWidth : thinStrokeWidth; // Thicker ticks at min/max
+                    const tick = createSvgElement('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, class: 'dial-division', 'stroke-width': strokeWidth });
+                    fragment.appendChild(tick);
+                });
+            }
+            decorationsGroup.appendChild(fragment);
+        }
+        // Initializes a single dial control (ticks, initial value, visuals)
+        function initializeDial(dialId) {
+            const dConfig = dialConfigs[dialId];
+            const dialEl = domRefs[`dial_${dialId}`];
+            const indicatorEl = domRefs[`indicator_${dialId}`];
+            const valueEl = domRefs[`value_${dialId}`];
+
+            if (!dConfig || !dialEl || !indicatorEl || !valueEl) {
+                console.warn(`initializeDial: Missing config/elements for dial '${dialId}'.`);
+                if (valueEl) valueEl.textContent = 'Err'; // Show error on display if possible
+                return;
+            }
+
+            createTicks(dialEl, dConfig.fullRange); // Create tick marks
+
+            const stateVal = state[dConfig.stateProp]; // Get initial value from state
+            if (typeof stateVal !== 'number' || typeof dConfig.displayMin !== 'number' || typeof dConfig.displayMax !== 'number') {
+                console.warn(`initializeDial: Invalid state/config value for dial '${dialId}'.`);
+                valueEl.textContent = 'Err';
+                return;
+            }
+
+            // Store config data on the element for later use
+            dialEl.dataset.dialId = dialId;
+            dialEl.dataset.min = dConfig.displayMin;
+            dialEl.dataset.max = dConfig.displayMax;
+            dialEl.dataset.format = (dConfig.formatFn === formatFloat) ? 'float' : 'int';
+
+            // Calculate initial display value and angle
+            const displayValue = mapRange(stateVal, dConfig.internalMin, dConfig.internalMax, dConfig.displayMin, dConfig.displayMax);
+            const initialAngle = dConfig.fullRange
+                ? valueToAngle360(displayValue, dConfig.displayMin, dConfig.displayMax)
+                : valueToAngle(displayValue, dConfig.displayMin, dConfig.displayMax);
+
+            updateDialVisuals(dialEl, indicatorEl, valueEl, initialAngle, dConfig.formatFn); // Set initial visuals
+        }
+        // Initializes a segmented button toggle group
+        function initializeToggle(toggleContainerRef, activeValue, dataAttributeKey) {
+            if (!toggleContainerRef) { console.warn(`initializeToggle: Invalid container ref for key '${dataAttributeKey}'.`); return; }
+            const buttons = toggleContainerRef.querySelectorAll('button');
+            buttons.forEach(btn => {
+                // Add 'active' class if the button's data attribute matches the active value
+                btn.classList.toggle('active', btn.dataset[dataAttributeKey] === activeValue);
+            });
+        }
+        // Initializes all control elements (dials, toggles)
+        function initializeControls() {
+            if (!domRefs.effectTypeToggle || !domRefs.hoverTypeToggle || !domRefs.themeToggle) { console.error("initializeControls: Missing toggle refs."); return; }
+
+            // Initialize each dial based on its config
+            Object.keys(dialConfigs).forEach(dialId => { initializeDial(dialId); });
+
+            // Initialize toggle states
+            initializeToggle(domRefs.effectTypeToggle, state.activeEffect, 'effectType');
+            initializeToggle(domRefs.hoverTypeToggle, state.activeHoverMode, 'hoverType');
+            initializeToggle(domRefs.themeToggle, state.currentTheme, 'theme');
+
+            // Apply the initial theme (without recreating dots yet)
+            applyTheme(state.currentTheme, false); // Apply theme CSS, don't start effect yet
+
+            updateEffectDialsVisibility(); // Show/hide dials based on initial effect
+
+            // Set initial hover power label (could be dynamic later if needed)
+            const hoverPowerLabel = document.getElementById('hover-power-label');
+            if (hoverPowerLabel) hoverPowerLabel.textContent = "Power";
+            else console.warn("initializeControls: hover-power-label missing.");
+        }
+
+        // ==========================================================================
+        // 8. Theme Management Functions
+        // ==========================================================================
+        // Updates CSS variables based on the current theme and brand hue
+        function updateThemeColors(updateDots = true) {
+            const root = document.documentElement; const rootStyle = root.style;
+            const currentThemeDef = themes[state.currentTheme]; const hue = state.brandHue;
+
+            // Prepare object to hold CSS variables to be set
+            const cssVariablesToSet = { '--brand-hue': hue.toFixed(1) };
+            const setVar = (varName, value) => { if (value) cssVariablesToSet[varName] = value; };
+
+            // Set body background color
+            const bodyBgDef = currentThemeDef.bodyBg;
+            const bodyBgColor = bodyBgDef ? formatOklch(bodyBgDef, bodyBgDef.hueSensitive ? hue : bodyBgDef.h) : 'oklch(1 0 0)';
+            setVar('--body-bg-color', bodyBgColor);
+
+            // Set slider track gradient
+            const sliderGradientString = buildSliderTrackGradient(state.currentTheme);
+            setVar('--slider-track-gradient', sliderGradientString);
+
+            // Determine dot resting and hover colors based on theme
+            let calculatedDotRestingColor, calculatedDotHoverColor;
+            if (state.currentTheme === 'saturated') {
+                const baseDotLC = currentThemeDef.accent;
+                calculatedDotRestingColor = formatOklch(baseDotLC, hue);
+                // Calculate hover color with increased lightness/chroma for saturated theme
+                const hoverL = Math.min(1.0, baseDotLC.l + config.SATURATED_HOVER_LIGHTNESS_INCREASE);
+                const hoverC = baseDotLC.c + config.SATURATED_HOVER_CHROMA_INCREASE;
+                calculatedDotHoverColor = formatOklch({ l: hoverL, c: hoverC }, hue);
+            } else {
+                calculatedDotRestingColor = currentThemeDef.dotRestingColor; // Could be hex string
+                calculatedDotHoverColor = formatOklch(currentThemeDef.dotHover, hue); // OKLCH object
+                // Fallback if dotRestingColor wasn't a string
+                if (typeof calculatedDotRestingColor !== 'string') {
+                    calculatedDotRestingColor = (state.currentTheme === 'dark') ? '#E0E0E0' : '#333333';
+                    console.warn("Used fallback dotRestingColor");
+                }
+            }
+            setVar('--dot-resting-color', calculatedDotRestingColor);
+            setVar('--dot-hover-color', calculatedDotHoverColor);
+
+            // Update the hue for the next bomb ring effect
+            const bombRingDef = currentThemeDef.bombRing;
+            if (bombRingDef && typeof bombRingDef === 'object') {
+                state.currentRingHue = bombRingDef.hueSensitive ? hue : (bombRingDef.h ?? hue);
+            } else { state.currentRingHue = hue; } // Fallback to brand hue
+
+            // Map theme definition keys to CSS variable names
+            const keyToVarMap = { bodyTextColor: '--body-text-color', panelBgBase: '--panel-bg-base', panelBgElevated: '--panel-bg-elevated', panelBgSunken: '--panel-bg-sunken', panelBorder: '--panel-border-color', panelText: '--panel-text-color', panelLabel: '--panel-label-color', toggleActiveText: '--toggle-active-text', toggleInactiveText: '--toggle-inactive-text', dialBaseStroke: '--dial-base-stroke', gridLine: '--grid-line-color', dotSleep: '--dot-sleep-color', accent: '--accent-color', interactiveBg: '--interactive-bg', interactiveBgHover: '--interactive-bg-hover', interactiveBgPressed: '--interactive-bg-pressed', svgBg: '--svg-bg-color', themeIconLightFill: '--theme-icon-light-fill', themeIconLightStroke: '--theme-icon-light-stroke', themeIconSaturatedFill: '--theme-icon-saturated-fill', themeIconSaturatedStroke: '--theme-icon-saturated-stroke', themeIconDarkFill: '--theme-icon-dark-fill', themeIconDarkStroke: '--theme-icon-dark-stroke', faintControlText: '--faint-control-text', secondaryText: '--secondary-text', masterPanelBorder: '--master-panel-border-color', masterPanelBg: '--master-panel-bg-color', };
+
+            // Iterate through the current theme definition and set corresponding CSS variables
+            for (const key in currentThemeDef) {
+                const valueDef = currentThemeDef[key];
+                const cssVarName = keyToVarMap[key];
+                if (cssVarName) {
+                    let cssValue = null;
+                    if (typeof valueDef === 'object' && valueDef !== null && typeof valueDef.l === 'number') { // OKLCH object
+                        const effectiveHue = valueDef.hueSensitive ? hue : (valueDef.h ?? null);
+                        cssValue = formatOklch(valueDef, effectiveHue);
+                    } else if (typeof valueDef === 'string') { // Direct string value (e.g., hex color, CSS var)
+                        cssValue = valueDef;
+                    }
+                    if (cssValue) { setVar(cssVarName, cssValue); }
+                }
+            }
+
+            // Apply all collected CSS variables to the root element
+            for (const varName in cssVariablesToSet) {
+                rootStyle.setProperty(varName, cssVariablesToSet[varName]);
+            }
+
+            // Optionally update existing dot colors immediately
+            if (updateDots && Array.isArray(state.dots)) {
+                state.dots.forEach(dot => {
+                    if (dot && dot.el) {
+                        const wasHoverFill = dot.currentFill === dot.hoverFill; // Check if dot was in hover state
+                        // Update the stored initial/hover fills for the dot
+                        dot.initialFill = calculatedDotRestingColor;
+                        dot.hoverFill = calculatedDotHoverColor;
+                        // If the dot wasn't hovered, update its fill to the new resting color
+                        if (!wasHoverFill) {
+                            setDotFill(dot, calculatedDotRestingColor, false); // No animation needed here
+                        }
+                    }
+                });
+            }
+
+            // Update console text color specifically
+            if (calculatedDotRestingColor) {
+                setVar('--console-text-color', calculatedDotRestingColor);
+                rootStyle.setProperty('--console-text-color', calculatedDotRestingColor);
+                if (domRefs.messageBoxContent) {
+                    domRefs.messageBoxContent.style.color = calculatedDotRestingColor;
+                }
+            }
+        }
+        // Applies a new theme: updates CSS, body class, recreates dots, and optionally restarts effect
+        function applyTheme(themeName, startEffect = true) {
+            const newThemeDef = themes[themeName] || themes.light; // Fallback to light theme
+            const body = document.body;
+
+            stopCurrentEffect(); // Stop existing background effect
+            state.dots.forEach(dot => { if (dot?.el) gsap.killTweensOf(dot.el); }); // Kill any dot animations
+
+            // Update body class for theme-specific CSS rules
+            body.classList.remove('dark-theme', 'saturated-theme-active');
+            if (newThemeDef.cssClass) { body.classList.add(newThemeDef.cssClass); }
+
+            state.currentTheme = themeName; // Update global state
+            updateThemeColors(true); // Update CSS variables and existing dot state
+
+            // Get the newly calculated dot colors from CSS variables
+            let targetInitialFill = getComputedStyle(document.documentElement).getPropertyValue('--dot-resting-color').trim();
+            let targetHoverFill = getComputedStyle(document.documentElement).getPropertyValue('--dot-hover-color').trim();
+
+             // Fallbacks if CSS variables somehow failed
+             if (!targetInitialFill) { targetInitialFill = (themeName === 'dark') ? '#E0E0E0' : '#333333'; console.warn("Fallback used for targetInitialFill"); }
+             if (!targetHoverFill) { targetHoverFill = targetInitialFill; console.warn("Fallback used for targetHoverFill"); }
+
+            // Recreate dots with the new theme's colors
+            createDots(targetInitialFill, targetHoverFill);
+
+            // Ensure hue slider position reflects current brand hue
+            setHueSliderPosition((state.brandHue / 360) * 100, state.brandHue, false);
+
+            // Restart the background effect if activated and requested
+            if (startEffect && state.masterMode === 'activated') {
+                startCurrentEffect();
+            }
+         }
+
+        // ==========================================================================
+        // 9. Animation Control Functions (Background Effects - SLOWED)
+        // ==========================================================================
+        // Stops all sparkle effect tweens
+        function stopSparkleAnimation() {
+            if (Array.isArray(state.sparkleTweens) && state.sparkleTweens.length > 0) {
+                state.sparkleTweens.forEach(tween => tween?.kill()); // Kill each tween
+                state.sparkleTweens = []; // Clear the array
+            }
+        }
+        // Starts the sparkle effect animation on all dots
+        function startSparkleAnimation() { // Uses slowed config values
+            if (state.masterMode === 'sleep' || state.activeEffect !== 'sparkle' || !gsap || !Array.isArray(state.dots) || state.dots.length === 0) return;
+            stopSparkleAnimation(); // Ensure previous sparkle is stopped
+
+            const freq = Math.max(config.EPSILON, state.sparkleFrequency || 1);
+            const internalSize = state.sparkleSizeIncrease;
+            const baseDuration = config.SPARKLE_BASE_DURATION / freq; // Duration scales with frequency
+            const baseDelay = config.SPARKLE_BASE_DELAY / freq; // Delay scales with frequency
+            const maxRadius = dotRadiusInitial + internalSize;
+
+            state.dots.forEach((dot, index) => {
+                if (!dot || !(dot.el instanceof SVGElement) || typeof dot.initialR !== 'number') { console.warn(`startSparkleAnimation: Skipping invalid dot ${index}`); return; }
+                try {
+                    // Reset dot visuals before starting animation
+                    gsap.set(dot.el, { attr: { r: dot.initialR }, fill: dot.initialFill });
+                    dot.currentFill = dot.initialFill;
+
+                    // Create repeating tween for radius change
+                    const tween = gsap.to(dot.el, {
+                        attr: { r: () => gsap.utils.random(dot.initialR, maxRadius) }, // Random radius target
+                        duration: () => gsap.utils.random(config.SPARKLE_MIN_DURATION_FACTOR, config.SPARKLE_MAX_DURATION_FACTOR) * baseDuration, // Random duration
+                        delay: () => gsap.utils.random(config.SPARKLE_MIN_DELAY_FACTOR, config.SPARKLE_MAX_DELAY_FACTOR) * baseDelay, // Random delay
+                        ease: "power1.inOut",
+                        yoyo: true, // Animate back to original radius
+                        repeat: -1, // Repeat indefinitely
+                        repeatRefresh: true, // Recalculate random values on each repeat
+                        overwrite: "auto"
+                    });
+                    state.sparkleTweens.push(tween); // Store tween reference
+                } catch (error) {
+                    console.error(`Error creating sparkle tween for dot ${index}:`, error);
+                }
+            });
+        }
+        // Stops the wave effect timeline
+        function stopWaveAnimation() {
+            if (state.waveTimeline) {
+                state.waveTimeline.kill(); // Kill the timeline
+                state.waveTimeline = null;
+            }
+        }
+        // Starts the wave effect animation
+        function startWaveAnimation() { // Uses slowed config values
+            if (state.masterMode === 'sleep' || state.activeEffect !== 'wave' || !gsap || !Array.isArray(state.dots) || state.dots.length === 0) return;
+            stopWaveAnimation(); // Ensure previous wave is stopped
+
+            const internalSize = state.waveSizeIncrease;
+            const dotRadiusWave = dotRadiusInitial + internalSize; // Target radius during wave peak
+            const waveCrossDuration = config.BASE_WAVE_CROSS_DURATION / (config.INITIAL_WAVE_SPEED_FACTOR || 1); // Duration for wave to cross grid
+            const angleRad = degreesToRadians(state.waveDirectionAngle);
+
+            // Calculate min/max distance metric along the wave direction
+            let minD = Infinity, maxD = -Infinity, validDotsExist = false;
+            state.dots.forEach(dot => {
+                if (!dot || typeof dot.cx !== 'number' || typeof dot.cy !== 'number') return;
+                const d = getWaveDistanceMetric(dot.cx, dot.cy, angleRad);
+                minD = Math.min(minD, d);
+                maxD = Math.max(maxD, d);
+                validDotsExist = true;
+            });
+            if (!validDotsExist) { console.error("startWaveAnimation: No valid dots."); return; }
+            const range = maxD - minD;
+            if (range < config.EPSILON) { console.warn("startWaveAnimation: Wave range negligible."); }
+
+            // Get valid dot elements
+            const dotElements = state.dots.map(d => d?.el).filter(el => el instanceof SVGElement);
+            if (dotElements.length === 0) { console.error("startWaveAnimation: No valid SVG dots."); return; }
+
+            // Reset dots before starting animation
+            dotElements.forEach((el, i) => {
+                const dot = state.dots.find(d => d?.el === el);
+                if (dot) {
+                    gsap.set(el, { attr: { r: dot.initialR }, fill: dot.initialFill });
+                    dot.currentFill = dot.initialFill;
+                }
+            });
+
+            // Create the main wave timeline
+            state.waveTimeline = gsap.timeline({
+                repeat: -1, // Repeat indefinitely
+                repeatDelay: config.WAVE_REPEAT_DELAY, // Delay between waves
+                onKill: () => { state.waveTimeline = null; } // Clear reference on kill
+            });
+
+            // Stagger function based on distance along wave direction
+            const staggerFn = (index, target) => {
+                const dot = state.dots.find(d => d?.el === target);
+                if (!dot || typeof dot.cx !== 'number' || typeof dot.cy !== 'number') return 0;
+                const d = getWaveDistanceMetric(dot.cx, dot.cy, angleRad);
+                // Normalize distance and scale by wave cross duration
+                return range > config.EPSILON ? ((d - minD) / range) * waveCrossDuration : 0;
+            };
+
+            try {
+                // Add tweens to the timeline: expand radius, then shrink back
+                state.waveTimeline
+                    .to(dotElements, {
+                        attr: { r: dotRadiusWave },
+                        duration: config.WAVE_EXPAND_DURATION,
+                        ease: "sine.out",
+                        stagger: staggerFn
+                    }, 0) // Start expand tweens at time 0
+                    .to(dotElements, {
+                        attr: { r: dotRadiusInitial },
+                        duration: config.WAVE_SHRINK_DURATION,
+                        ease: "sine.in",
+                        stagger: staggerFn
+                    }, `+=${config.WAVE_SHRINK_DELAY}`); // Start shrink tweens after expand + delay
+            } catch (error) {
+                console.error("Error creating wave tweens:", error);
+                stopWaveAnimation(); // Stop if error occurs
+            }
+        }
+        // Stops the currently active background effect (wave or sparkle)
+        function stopCurrentEffect() {
+            if (state.activeEffect === 'wave') stopWaveAnimation();
+            else if (state.activeEffect === 'sparkle') stopSparkleAnimation();
+        }
+        // Starts the currently selected background effect if activated
+        function startCurrentEffect() {
+            if (state.masterMode !== 'activated') return; // Only start if not sleeping
+            if (state.activeEffect === 'wave') startWaveAnimation();
+            else if (state.activeEffect === 'sparkle') startSparkleAnimation();
+        }
+
+        // ==========================================================================
+        // 10. Interaction Effect Functions (Tap Effects - SLOWED)
+        // ==========================================================================
+        // Triggers the "bomb" effect: random dots pop with rings
+        function triggerPopEffect() { // Uses slowed config values
+            if (state.masterMode === 'sleep' || !gsap || !state || !domRefs.tapButton || !domRefs.svgElement || !Array.isArray(state.dots) || state.dots.length === 0) { console.warn("triggerPopEffect: Preconditions failed."); return; }
+
+            const currentThemeDef = themes[state.currentTheme];
+            if (!currentThemeDef?.bombRing) { console.error("Bomb ring color def not found."); return; }
+
+            _startTapEffect('bomb'); // Stop effect & log message
+
+            // Get bomb ring color using the current ring hue, then increment hue for next time
+            const bombRingBase = currentThemeDef.bombRing;
+            const popColor = formatOklch(bombRingBase, state.currentRingHue);
+            state.currentRingHue = (state.currentRingHue + config.RING_HUE_INCREMENT) % 360;
+
+            // Select a random subset of dots
+            const shuffledDots = [...state.dots].sort(() => 0.5 - Math.random());
+            const targetCount = Math.floor(shuffledDots.length * 0.33); // Affect ~1/3 of dots
+            const targetDots = shuffledDots.slice(0, targetCount);
+            const fragment = document.createDocumentFragment();
+            let animationsComplete = 0;
+
+            if (targetDots.length === 0) { startCurrentEffect(); return; } // No dots selected, restart effect
+
+            // Create and animate a ring for each target dot
+            targetDots.forEach((dot, index) => {
+                if (!dot || !(dot.el instanceof SVGElement) || typeof dot.cx !== 'number' || typeof dot.cy !== 'number') { console.warn(`triggerPopEffect: Skipping invalid dot ${index}.`); animationsComplete++; return; }
+
+                const ring = createSvgElement('circle', {
+                    cx: dot.cx, cy: dot.cy, r: dotRadiusInitial,
+                    stroke: popColor, 'stroke-width': config.POP_STROKE_WIDTH,
+                    class: 'pop-ring' // For potential styling/selection
+                });
+                fragment.appendChild(ring);
+
+                // Animate ring expanding and fading out
+                gsap.fromTo(ring,
+                    { attr: { r: dotRadiusInitial }, opacity: config.POP_INITIAL_OPACITY },
+                    {
+                        attr: { r: config.POP_FINAL_RADIUS }, opacity: 0,
+                        duration: config.POP_DURATION, ease: "power2.out",
+                        onComplete: () => {
+                            ring.remove(); // Clean up ring element
+                            animationsComplete++;
+                            // Restart background effect only after all rings are done
+                            if (animationsComplete === targetDots.length) {
+                                startCurrentEffect();
+                            }
+                        }
+                    }
+                );
+            });
+            domRefs.svgElement.appendChild(fragment); // Add all rings at once
+        }
+        // Triggers the "bomb" effect centered at a specific SVG point
+        function triggerPopEffectAtPoint(svgX, svgY) { // Uses slowed config values
+            if (state.masterMode === 'sleep' || !gsap || !state || !domRefs.svgElement) { console.warn("triggerPopEffectAtPoint: Preconditions failed."); return; }
+
+            const currentThemeDef = themes[state.currentTheme];
+            if (!currentThemeDef?.bombRing) { console.error("Bomb ring color def not found for point pop."); return; }
+
+            _startTapEffect('bomb'); // Stop effect & log message
+
+            // Get bomb ring color and increment hue
+            const bombRingBase = currentThemeDef.bombRing;
+            const popColor = formatOklch(bombRingBase, state.currentRingHue);
+            state.currentRingHue = (state.currentRingHue + config.RING_HUE_INCREMENT) % 360;
+
+            const popAreaRadius = config.POP_FINAL_RADIUS; // Use final radius as area indicator
+            const numPops = 3; // Number of rings to create around the point
+            let animationsComplete = 0;
+            const fragment = document.createDocumentFragment();
+
+            // Create and animate multiple rings randomly distributed around the click point
+            for (let i = 0; i < numPops; i++) {
+                // Random angle and distance (sqrt for more central distribution)
+                const randomAngle = Math.random() * 2 * Math.PI;
+                const randomRadiusMultiplier = Math.sqrt(Math.random());
+                const randomDist = randomRadiusMultiplier * popAreaRadius;
+                const randX = svgX + randomDist * Math.cos(randomAngle);
+                const randY = svgY + randomDist * Math.sin(randomAngle);
+
+                const ring = createSvgElement('circle', {
+                    cx: randX, cy: randY, r: dotRadiusInitial,
+                    stroke: popColor, 'stroke-width': config.POP_STROKE_WIDTH,
+                    class: 'pop-ring'
+                });
+                fragment.appendChild(ring);
+
+                // Animate ring
+                gsap.fromTo(ring,
+                    { attr: { r: dotRadiusInitial }, opacity: config.POP_INITIAL_OPACITY },
+                    {
+                        attr: { r: config.POP_FINAL_RADIUS }, opacity: 0,
+                        duration: config.POP_DURATION, ease: "power2.out",
+                        onComplete: () => {
+                            ring.remove();
+                            animationsComplete++;
+                            if (animationsComplete === numPops) {
+                                startCurrentEffect(); // Restart after all rings finish
+                            }
+                        }
+                    }
+                );
+            }
+            domRefs.svgElement.appendChild(fragment);
+            if (numPops === 0) { startCurrentEffect(); } // Restart immediately if no pops created
+        }
+        // Triggers the "shake" effect: dots move randomly and return
+        function triggerShakeEffect() { // Uses slowed config values
+            if (state.masterMode === 'sleep' || !gsap || !Array.isArray(state.dots) || state.dots.length === 0) { console.warn("triggerShakeEffect: Preconditions failed."); return; }
+
+            _startTapEffect('shake'); // Stop effect & log message
+
+            const shakeAmount = config.SHAKE_AMOUNT; // Max displacement
+            const partDuration = config.SHAKE_DURATION / 3; // Duration for each part of the shake (out, move, back)
+            let timelinesComplete = 0;
+
+            // Filter for valid dots
+            const validDots = state.dots.filter(dot => dot && dot.el instanceof SVGElement && typeof dot.cx === 'number' && typeof dot.cy === 'number');
+            if (validDots.length === 0) { startCurrentEffect(); return; } // No valid dots, restart effect
+
+            validDots.forEach((dot) => {
+                gsap.killTweensOf(dot.el, "attr"); // Kill previous position tweens
+
+                // Create a timeline for each dot's shake
+                const tl = gsap.timeline({
+                    delay: gsap.utils.random(0, config.SHAKE_DELAY_MAX), // Random start delay
+                    onComplete: () => {
+                        timelinesComplete++;
+                        // Restart background effect only after all shakes are done
+                        if (timelinesComplete === validDots.length) {
+                            startCurrentEffect();
+                        }
+                    }
+                });
+
+                // Calculate two random positions within the shake amount
+                const randX1 = dot.cx + gsap.utils.random(-shakeAmount, shakeAmount);
+                const randY1 = dot.cy + gsap.utils.random(-shakeAmount, shakeAmount);
+                const randX2 = dot.cx + gsap.utils.random(-shakeAmount, shakeAmount);
+                const randY2 = dot.cy + gsap.utils.random(-shakeAmount, shakeAmount);
+
+                // Animate to first random pos, then second, then back to original
+                tl.to(dot.el, { attr: { cx: randX1, cy: randY1 }, duration: partDuration, ease: "power1.inOut" })
+                  .to(dot.el, { attr: { cx: randX2, cy: randY2 }, duration: partDuration, ease: "power1.inOut" })
+                  .to(dot.el, { attr: { cx: dot.cx, cy: dot.cy }, duration: partDuration, ease: "power1.inOut" });
+            });
+        }
+        // Triggers the "pulse" effect: dots expand radius and move up, staggered from center
+        function triggerPulseEffect() { // Uses slowed config values
+            if (state.masterMode === 'sleep' || !gsap || !Array.isArray(state.dots) || state.dots.length === 0) { console.warn("triggerPulseEffect: Preconditions failed."); return; }
+
+            _startTapEffect('pulse'); // Stop effect & log message
+
+            const dotElements = state.dots.map(d => d.el).filter(el => el instanceof SVGElement);
+            if (dotElements.length === 0) { startCurrentEffect(); return; } // No valid elements, restart
+
+            const centerX = geometry.gridCenter.x;
+            const centerY = geometry.gridCenter.y;
+
+            // Find max distance from center for stagger calculation
+            let maxDist = 0;
+            state.dots.forEach(dot => {
+                const d = distance(centerX, centerY, dot.cx, dot.cy);
+                if (d > maxDist) maxDist = d;
+            });
+            maxDist = Math.max(maxDist, config.EPSILON); // Avoid division by zero
+
+            gsap.killTweensOf(dotElements, "attr"); // Kill previous attribute tweens
+
+            // Animate radius and vertical position, yoyo back, staggered by distance
+            gsap.to(dotElements, {
+                duration: config.PULSE_DURATION / 2, // Duration for one way (expand/move up)
+                attr: {
+                    // Target radius: initial + max increase
+                    r: (i, target) => (state.dots.find(d => d.el === target)?.initialR ?? dotRadiusInitial) + config.PULSE_MAX_RADIUS_INCREASE,
+                    // Target y: initial - max displacement (move up)
+                    cy: (i, target) => (state.dots.find(d => d.el === target)?.cy ?? 0) - config.PULSE_MAX_Y_DISPLACEMENT
+                },
+                ease: "power1.out",
+                yoyo: true, // Animate back to original state
+                repeat: 1, // Play forward then backward once
+                stagger: (index, target) => {
+                    const dotData = state.dots.find(d => d.el === target);
+                    if (!dotData) return 0;
+                    const dist = distance(centerX, centerY, dotData.cx, dotData.cy);
+                    // Stagger delay based on normalized distance from center
+                    return (dist / maxDist) * config.PULSE_TOTAL_STAGGER;
+                },
+                onComplete: () => {
+                    // Ensure dots are visually reset after animation (sometimes GSAP leaves tiny residuals)
+                    state.dots.forEach(dot => { if(dot) resetDotToInitialVisuals(dot, false); });
+                    startCurrentEffect(); // Restart background effect
+                }
+            });
+        }
+
+        // ==========================================================================
+        // 11. Mouse/Touch Handling Functions (Hover Effects - SVG Area)
+        // ==========================================================================
+        // Applies the hover effect (repel/attract) based on cursor position
+        function applyHoverEffect(svgX, svgY) { // Uses slowed config values for duration
+            if (!gsap || !Array.isArray(state.dots) || state.dots.length === 0 || !geometry.scaleFactor || geometry.scaleFactor <= 0) return;
+
+            const hoverRadiusSVG = state.hoverFalloff / geometry.scaleFactor; // Falloff radius in SVG units
+            const visualCursorRadiusSVG = hoverRadiusSVG / 2; // Radius for the visual indicator circle
+
+            // Update visual cursor circle position and size
+            if (domRefs.cursorGravityCircle) {
+                gsap.set(domRefs.cursorGravityCircle, { attr: { cx: svgX, cy: svgY, r: visualCursorRadiusSVG } });
+            }
+
+            state.dots.forEach(dot => {
+                if (!dot || !dot.el || !dot.initialFill || !dot.hoverFill) return;
+
+                const dx = svgX - dot.cx;
+                const dy = svgY - dot.cy;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                // Calculate intensity based on distance (linear falloff)
+                const linearIntensity = clamp(1 - (dist / hoverRadiusSVG), 0, 1);
+
+                // Determine target fill color based on intensity
+                const targetColor = linearIntensity > 0.01 ? dot.hoverFill : dot.initialFill;
+                // Update fill immediately if it changed (avoids GSAP overhead for simple color swap)
+                if (dot.currentFill !== targetColor) {
+                    setDotFill(dot, targetColor, false);
+                }
+
+                // Calculate target position based on intensity and mode (attract/repel)
+                let targetCx = dot.cx;
+                let targetCy = dot.cy;
+                const shiftIntensity = linearIntensity; // Use linear intensity for shift calculation
+                if (shiftIntensity > 0 && dist > config.EPSILON) { // Only shift if within radius and not at center
+                    const powerInternal = state.hoverPower;
+                    const powerSVG = powerInternal / geometry.scaleFactor; // Power adjusted for SVG scale
+                    const directionMultiplier = state.activeHoverMode === 'attract' ? 1 : -1; // Attract towards, repel away
+                    const shiftAmount = powerSVG * shiftIntensity; // Shift amount scales with intensity
+                    targetCx += (dx / dist) * shiftAmount * directionMultiplier; // Move along vector to/from cursor
+                    targetCy += (dy / dist) * shiftAmount * directionMultiplier;
+                }
+
+                // Animate dot position towards target
+                gsap.to(dot.el, {
+                    attr: { cx: targetCx, cy: targetCy },
+                    duration: config.ANIMATION_DURATION_HOVER_POS, // Use slowed duration
+                    ease: 'power1.out',
+                    overwrite: "auto" // Allow new hover positions to overwrite old ones
+                });
+            });
+        }
+        // Converts screen coordinates (e.g., mouse event) to SVG coordinates
+        function getSvgCoordinates(screenX, screenY) {
+            // Ensure CTM inverse is available (may need recalculation on resize/reflow)
+            if (!geometry.ctmInverse && domRefs.svgElement) {
+                try {
+                    const ctm = domRefs.svgElement.getScreenCTM();
+                    if (ctm) geometry.ctmInverse = ctm.inverse();
+                } catch (e) { console.error("Error getting/inverting CTM:", e); return null; }
+            }
+            if (!geometry.ctmInverse) { console.error("getSvgCoordinates: CTM inverse unavailable."); return null; }
+            if (!domRefs.svgElement) { console.error("getSvgCoordinates: SVG Element missing."); return null; }
+
+            const pt = domRefs.svgElement.createSVGPoint(); // Use SVG API point
+            pt.x = screenX;
+            pt.y = screenY;
+            try {
+                return pt.matrixTransform(geometry.ctmInverse); // Transform using inverse CTM
+            } catch (e) {
+                console.error("Error transforming coordinates:", e);
+                return null;
+            }
+        }
+        // Handles mouse entering the SVG area
+        function handleMouseEnter(event) {
+            if (state.isDraggingSvg || !domRefs.svgElement || state.masterMode === 'sleep') return;
+            state.isMouseOverSvg = true;
+            if (state.masterMode === 'activated') {
+                // Add mousemove listener only when activated and mouse enters
+                domRefs.svgElement.addEventListener('mousemove', handleMouseMove);
+            }
+            domRefs.svgElement.classList.add('mouse-over'); // Add class for cursor circle visibility
+        }
+        // Handles mouse moving within the SVG area
+        function handleMouseMove(event) {
+            if (state.isDraggingDial || state.isDraggingSvg || state.masterMode === 'sleep') return;
+            const svgMousePoint = getSvgCoordinates(event.clientX, event.clientY);
+            if (!svgMousePoint) return; // Exit if coordinate conversion failed
+            applyHoverEffect(svgMousePoint.x, svgMousePoint.y); // Apply effect at current position
+        }
+        // Handles mouse leaving the SVG area
+        function handleMouseLeave(event) {
+            if (state.isDraggingSvg || !domRefs.svgElement) return; // Don't process if dragging touch
+            state.isMouseOverSvg = false;
+            domRefs.svgElement.removeEventListener('mousemove', handleMouseMove); // Remove listener
+            domRefs.svgElement.classList.remove('mouse-over'); // Hide cursor circle
+
+            // Reset dots to initial state if not sleeping or dragging a dial
+            if (state.masterMode !== 'sleep' && !state.isDraggingDial) {
+                if (!gsap || !Array.isArray(state.dots)) return;
+                state.dots.forEach(dot => {
+                    if (dot?.el instanceof SVGElement && dot.initialFill) {
+                        resetDotToInitialVisuals(dot, true); // Animate dots back
+                    }
+                });
+            }
+        }
+        // Handles touch starting on the SVG area
+        function handleTouchStart(e) {
+            if (state.isDraggingDial || state.masterMode === 'sleep' || !e.touches || e.touches.length === 0) return;
+            e.preventDefault(); // Prevent default touch actions like scrolling
+            state.isDraggingSvg = true; // Flag that touch drag is active
+            state.isMouseOverSvg = true; // Treat touch as mouse over for effects
+
+            // Add listeners for move and end events to the document
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd);
+            document.addEventListener('touchcancel', handleTouchEnd);
+
+            domRefs.svgElement.classList.add('mouse-over'); // Show cursor circle
+
+            // Apply effect at initial touch point
+            const touch = e.touches[0];
+            const svgTouchPoint = getSvgCoordinates(touch.clientX, touch.clientY);
+            if (svgTouchPoint) {
+                applyHoverEffect(svgTouchPoint.x, svgTouchPoint.y);
+            }
+        }
+        // Handles touch moving over the screen (while dragging on SVG)
+        function handleTouchMove(e) {
+            if (!state.isDraggingSvg || state.isDraggingDial || state.masterMode === 'sleep' || !e.touches || e.touches.length === 0) return;
+            e.preventDefault(); // Prevent scrolling during drag
+
+            // Apply effect at current touch point
+            const touch = e.touches[0];
+            const svgTouchPoint = getSvgCoordinates(touch.clientX, touch.clientY);
+            if (svgTouchPoint) {
+                applyHoverEffect(svgTouchPoint.x, svgTouchPoint.y);
+            }
+        }
+        // Handles touch ending or cancelling
+        function handleTouchEnd(e) {
+            if (!state.isDraggingSvg) return; // Only process if currently dragging
+            state.isDraggingSvg = false; // Clear drag flag
+            state.isMouseOverSvg = false; // Clear mouse over flag
+
+            // Remove document listeners
+            document.removeEventListener('touchmove', handleTouchMove);
+            document.removeEventListener('touchend', handleTouchEnd);
+            document.removeEventListener('touchcancel', handleTouchEnd);
+
+            domRefs.svgElement.classList.remove('mouse-over'); // Hide cursor circle
+
+            // Reset dots if not sleeping
+            if (state.masterMode !== 'sleep') {
+                if (!gsap || !Array.isArray(state.dots)) return;
+                state.dots.forEach(dot => {
+                    if (dot?.el instanceof SVGElement && dot.initialFill) {
+                        resetDotToInitialVisuals(dot, true); // Animate dots back
+                    }
+                });
+            }
+        }
+        // Handles click events on the SVG (triggers point pop effect)
+        function handleSvgClick(event) {
+            // Only trigger for mouse clicks when not sleeping or dragging dial
+            if (state.masterMode === 'sleep' || event.pointerType !== 'mouse' || state.isDraggingDial) {
+                return;
+            }
+            const svgClickPoint = getSvgCoordinates(event.clientX, event.clientY);
+            if (svgClickPoint) {
+                triggerPopEffectAtPoint(svgClickPoint.x, svgClickPoint.y); // Trigger pop at click location
+            }
+        }
+
+        // ==========================================================================
+        // 12. Master Mode Functions (Sleep/Activated) & Logo Animation
+        // ==========================================================================
+        // Toggles the visual dimmed state for sleep mode
+        function setSleepDimmedState(isDimmed) {
+            document.body.classList.toggle('app-sleeping', isDimmed);
+
+            // Select all potentially dimmable controls
+            const allControls = document.querySelectorAll('#control-console-frame button, #control-console-frame input[type=range], #control-console-frame .hue-slider-track, #control-console-frame .hue-slider-thumb-container');
+
+            allControls.forEach(ctrl => {
+                // Check if the control is the 'ON' button in the master toggle
+                const isMasterOnButton = ctrl.closest('#master-toggle') && ctrl.dataset.masterMode === 'activated';
+
+                // Disable buttons/inputs unless it's the master 'ON' button
+                if (ctrl.tagName === 'BUTTON' || ctrl.tagName === 'INPUT') {
+                    ctrl.disabled = isDimmed && !isMasterOnButton;
+                }
+
+                // Set cursor style for hue slider elements
+                if (isDimmed && (ctrl.classList.contains('hue-slider-track') || ctrl.classList.contains('hue-slider-thumb-container'))) {
+                    ctrl.style.cursor = 'default';
+                } else if (!isDimmed && ctrl.classList.contains('hue-slider-thumb-container')) {
+                    ctrl.style.cursor = 'pointer';
+                } else if (!isDimmed && ctrl.classList.contains('hue-slider-track')) {
+                    ctrl.style.cursor = 'pointer';
+                }
+            });
+
+            // Animate logo opacity
+            if (domRefs.logoElements && domRefs.logoElements.length > 0) {
+                gsap.killTweensOf(domRefs.logoElements, "opacity"); // Kill previous opacity tweens
+                const targetOpacity = isDimmed ? config.LOGO_DIM_OPACITY : 1;
+                // Use CSS transition duration for consistency, animate out faster
+                const duration = isDimmed ? 0 : (getCssVarAsNumber('--transition-duration-slow') || 0.6);
+                const ease = isDimmed ? 'none' : 'power1.out';
+                // Apply to all logo elements
+                domRefs.logoElements.forEach(el => {
+                    gsap.to(el, { opacity: targetOpacity, duration: duration, ease: ease, overwrite: true });
+                });
+            } else { console.warn("setSleepDimmedState: Could not find logo elements to control opacity."); }
+        }
+        // Enters sleep mode: stops effects, dims UI, puts dots to sleep
+        function enterSleepMode() {
+            if (state.masterMode === 'sleep') return; // Already sleeping
+            state.masterMode = 'sleep';
+            logMessage(getNextMessage('sleep'));
+            stopCurrentEffect(); // Stop background effects
+
+            // If mouse was over SVG, trigger leave handler to reset dots
+            if (state.isMouseOverSvg) { handleMouseLeave(); }
+
+            // Kill any ongoing logo animation
+            if (state.logoAnimationTimeline) { state.logoAnimationTimeline.kill(); state.logoAnimationTimeline = null; }
+
+            setSleepDimmedState(true); // Apply dimmed styles and disable controls
+
+            if(domRefs.svgElement) domRefs.svgElement.classList.remove('mouse-over'); // Ensure hover class is removed
+
+            // Animate dots to sleep state (small, centered vertically, sleep color)
+            if (gsap && state.dots.length > 0) {
+                const sleepColor = getComputedStyle(document.documentElement).getPropertyValue('--dot-sleep-color').trim() || '#B3BFCD';
+                const dotElementsToSleep = state.dots.map(d => d?.el).filter(el => el instanceof SVGElement);
+                if (dotElementsToSleep.length > 0) {
+                    gsap.to(dotElementsToSleep, {
+                        duration: gsap.utils.random(1.0, 1.6), /* Slowed */
+                        delay: gsap.utils.random(0, 1.2), /* Slowed */
+                        ease: 'power2.inOut',
+                        attr: { r: 1, cy: geometry.gridCenter.y }, // Target radius 1, centered Y
+                        fill: sleepColor,
+                        overwrite: true,
+                        stagger: 0.004, /* Slowed */
+                        onStart: (dotIndex) => { // Update internal state on start
+                            const targetElement = dotElementsToSleep[dotIndex];
+                            const dot = state.dots.find(d => d.el === targetElement);
+                            if (dot) dot.currentFill = sleepColor;
+                        }
+                    });
+                }
+            }
+        }
+        // Enters activated mode: undims UI, starts intro animation
+        function enterActivatedMode() {
+            if (state.masterMode === 'activated') return; // Already active
+            state.masterMode = 'activated';
+            logMessage(getNextMessage('activate'));
+
+             // Kill any previous logo animation (e.g., dimming)
+            if (state.logoAnimationTimeline) { state.logoAnimationTimeline.kill(); state.logoAnimationTimeline = null; }
+
+            setSleepDimmedState(false); // Remove dimmed styles, enable controls
+
+            // Re-apply theme colors (important if hue changed during sleep) but don't recreate dots
+            applyTheme(state.currentTheme, false);
+
+            startIntroAnimation(); // Start the wake-up animation
+        }
+
+        // ==========================================================================
+        // 13. Intro Animation (Activation - Enhanced Flicker)
+        // ==========================================================================
+        // Starts the intro animation sequence for dots and logo
+        function startIntroAnimation() { // Uses updated config values for logo flicker
+            const dotElements = state.dots.map(d => d?.el).filter(el => el instanceof SVGElement);
+            const logoElements = domRefs.logoElements;
+
+            // Kill previous animations to prevent conflicts
+            if (state.logoAnimationTimeline) state.logoAnimationTimeline.kill();
+            if (dotElements.length) gsap.killTweensOf(dotElements);
+            if (logoElements && logoElements.length) gsap.killTweensOf(logoElements);
+
+            // --- Logo Flicker & Oscillate Animation ---
+            if (logoElements && logoElements.length > 0) {
+                state.logoAnimationTimeline = gsap.timeline(); // Create new timeline
+                const flickerOffOpacity = 0.2; // Low opacity during flicker 'off' state
+                const finalOpacity = 1.0; // Target full opacity
+
+                // 1. Initial dim state before flicker
+                state.logoAnimationTimeline.set(logoElements, { opacity: flickerOffOpacity });
+
+                // 2. Flicker sequence with progressive brightening
+                for (let i = 0; i < config.LOGO_FLICKER_COUNT; i++) {
+                    // Calculate target 'on' opacity for this cycle, increasing linearly
+                    const targetOnOpacity = flickerOffOpacity + (finalOpacity - flickerOffOpacity) * (i + 1) / config.LOGO_FLICKER_COUNT;
+
+                    state.logoAnimationTimeline
+                        // Flicker OFF (briefly dim)
+                        .to(logoElements, {
+                            opacity: flickerOffOpacity,
+                            duration: config.LOGO_FLICKER_DURATION, // Fast duration
+                            ease: 'steps(1)' // Abrupt change
+                         })
+                        // Flicker ON (to progressively brighter state)
+                        .to(logoElements, {
+                            opacity: targetOnOpacity,
+                            duration: config.LOGO_FLICKER_DURATION, // Fast duration
+                            ease: 'steps(1)' // Abrupt change
+                         });
+                }
+
+                // 3. Ensure logo is fully opaque after flicker finishes
+                state.logoAnimationTimeline.set(logoElements, { opacity: finalOpacity });
+
+                // 4. Subtle ongoing opacity oscillation (starts after flicker)
+                state.logoAnimationTimeline.to(logoElements, {
+                    opacity: config.LOGO_OSCILLATE_OPACITY_MIN, // Oscillate down to min opacity
+                    duration: config.LOGO_OSCILLATE_DURATION, // Slow oscillation
+                    ease: 'sine.inOut',
+                    repeat: -1, // Repeat indefinitely
+                    yoyo: true // Oscillate back and forth
+                }, ">"); // Start this tween immediately after the previous step completes
+            }
+
+            // --- Dot Intro Animation (From sleep state to grid position) ---
+            if (!dotElements.length) { startCurrentEffect(); return; } // No dots, just start background effect
+
+            const gridWidth = DATA_BOUNDS.width > 0 ? DATA_BOUNDS.width : 1;
+            const sleepColor = getComputedStyle(document.documentElement).getPropertyValue('--dot-sleep-color').trim() || '#B3BFCD';
+
+            // Set initial state (matches sleep state)
+            gsap.set(dotElements, {
+                fill: sleepColor,
+                attr: {
+                    cx: (i, t) => state.dots.find(d => d.el === t)?.cx ?? 0, // Start at grid X
+                    cy: geometry.gridCenter.y, // Start at center Y
+                    r: 1 // Start at radius 1
+                }
+            });
+            // Update internal state for fill color
+            state.dots.forEach(d => { if (d) { d.currentFill = sleepColor; }});
+
+            // Animate dots to their final grid positions and colors
+            gsap.to(dotElements, {
+                duration: config.INTRO_ANIM_DURATION, // Uses slowed duration
+                delay: () => gsap.utils.random(0, config.INTRO_ANIM_RANDOM_DELAY), // Uses slowed random delay
+                attr: {
+                    cx: (i, t) => state.dots.find(d => d.el === t)?.cx ?? 0, // Target final X
+                    cy: (i, t) => state.dots.find(d => d.el === t)?.cy ?? 0, // Target final Y
+                    r: (i, t) => state.dots.find(d => d.el === t)?.initialR ?? dotRadiusInitial // Target final radius
+                },
+                fill: (i, t) => state.dots.find(d => d.el === t)?.initialFill ?? '#000', // Target final fill
+                stagger: (index, target) => { // Stagger based on horizontal position
+                    const dotData = state.dots.find(d => d.el === target);
+                    if (!dotData) return 0;
+                    const normalizedX = (dotData.cx - DATA_BOUNDS.minX) / gridWidth;
+                    return normalizedX * config.INTRO_ANIM_STAGGER * Math.max(1, dotElements.length); // Uses slowed stagger
+                },
+                ease: "power2.out",
+                overwrite: true,
+                onStart: () => { // Update internal fill state when animation starts
+                    state.dots.forEach(d => { if(d) d.currentFill = d.initialFill; });
+                },
+                onComplete: () => {
+                    startCurrentEffect(); // Start background effect after intro completes
+                }
+            });
+        }
+
+        // ==========================================================================
+        // 14. Control Logic & Update Functions
+        // ==========================================================================
+        // Updates dial indicator rotation and value display, returns the displayed value
+        function updateDialVisuals(dialEl, indicatorEl, valueEl, angleDeg, formatFn = Math.round) {
+            if (!(dialEl instanceof SVGElement) || !(indicatorEl instanceof SVGGElement) || !(valueEl instanceof HTMLElement)) return NaN;
+            if (typeof angleDeg !== 'number' || isNaN(angleDeg)) angleDeg = config.DIAL_ANGLE_PHYSICAL_MIN; // Default to min if invalid
+            if (typeof formatFn !== 'function') formatFn = Math.round; // Default format
+
+            const dialId = dialEl.dataset.dialId;
+            const dConfig = dialConfigs[dialId];
+            if (!dConfig) { console.error(`updateDialVisuals: Config not found for dial ID '${dialId}'`); valueEl.textContent = 'Err'; return NaN; }
+
+            // Clamp angle if not a full-range dial
+            const finalAngle = dConfig.fullRange ? (angleDeg % 360 + 360) % 360 : getClampedAngle(angleDeg);
+
+            // Update indicator rotation
+            indicatorEl.setAttribute('transform', `rotate(${finalAngle})`);
+
+            // Calculate value based on final angle
+            const value = dConfig.fullRange
+                ? angleToValue360(finalAngle, dConfig.displayMin, dConfig.displayMax)
+                : angleToValue(finalAngle, dConfig.displayMin, dConfig.displayMax);
+
+            // Update text display
+            valueEl.textContent = formatFn(value);
+            return value; // Return the displayed value
+        }
+        // Sets the active background effect (wave or sparkle)
+        function setActiveEffect(newEffect) {
+            if (!newEffect || (newEffect !== 'wave' && newEffect !== 'sparkle') || (newEffect === state.activeEffect)) return; // No change or invalid effect
+
+            stopCurrentEffect(); // Stop the old effect
+            // Reset dots visually immediately (no animation)
+            state.dots.forEach(dot => { if(dot) resetDotToInitialVisuals(dot, false); });
+
+            state.activeEffect = newEffect; // Update state
+            updateEffectDialsVisibility(); // Show/hide relevant dials
+            startCurrentEffect(); // Start the new effect
+        }
+        // Shows/hides dial containers based on the active effect
+        function updateEffectDialsVisibility() {
+            if (!domRefs.waveControls || !domRefs.sparkleControls) { console.error("updateEffectDialsVisibility: Control refs missing."); return; }
+            const showWave = state.activeEffect === 'wave';
+            const showSparkle = state.activeEffect === 'sparkle';
+            try {
+                domRefs.waveControls.forEach(el => { el.style.display = showWave ? 'flex' : 'none'; });
+                domRefs.sparkleControls.forEach(el => { el.style.display = showSparkle ? 'flex' : 'none'; });
+            } catch (error) { console.error("Error updating dial visibility:", error); }
+        }
+
+        // --- Hue Slider Functions ---
+        // Calculates the slider percentage and hue value based on clientX coordinate
+        function calculateHueSliderState(clientX) {
+            // Cache or recalculate track bounding rect
+            if (!state.hueSliderTrackRect) {
+                if (domRefs.hueTrack) { state.hueSliderTrackRect = domRefs.hueTrack.getBoundingClientRect(); }
+                else { console.warn("calculateHueSliderState: hueTrack ref missing."); return { percent: 50, value: 180 }; } // Fallback
+            }
+             // Handle cases where rect might be invalid (e.g., display: none)
+             if (!state.hueSliderTrackRect || state.hueSliderTrackRect.width <= 0) {
+                 console.warn("calculateHueSliderState: Invalid track bounding rect.");
+                 // Attempt to remeasure
+                 if (domRefs.hueTrack) state.hueSliderTrackRect = domRefs.hueTrack.getBoundingClientRect();
+                 // If still invalid, return fallback
+                 if (!state.hueSliderTrackRect || state.hueSliderTrackRect.width <= 0) { return { percent: 50, value: 180 }; }
+             }
+
+            // Calculate position relative to track start, clamp to 0-width
+            let positionX = clientX - state.hueSliderTrackRect.left;
+            positionX = clamp(positionX, 0, state.hueSliderTrackRect.width);
+
+            // Calculate percentage and hue value
+            const percent = clamp((positionX / state.hueSliderTrackRect.width) * 100, 0, 100);
+            const value = Math.round((percent / 100) * 360);
+            return { percent, value };
+        }
+        // Sets the visual position of the hue slider thumb and updates the brand hue
+        function setHueSliderPosition(percent, value, animate = false) { // Uses slowed config values for animation
+            gsap.killTweensOf(domRefs.hueThumbContainer, { targets: 'left', overwrite: true }); // Kill previous position tweens
+
+            const clickAnimDuration = getCssVarAsNumber('--gsap-slider-click-duration') || 0.16; // Use slowed value
+
+            // Animate or set thumb position
+            if (animate) {
+                gsap.to(domRefs.hueThumbContainer, { left: `${percent}%`, duration: clickAnimDuration, ease: 'power1.out' });
+            } else {
+                gsap.set(domRefs.hueThumbContainer, { left: `${percent}%` });
+            }
+
+            // Update brand hue and theme colors if changed
+            if (state.brandHue !== value) {
+                const previousHue = state.brandHue;
+                state.brandHue = value;
+                clearTimeout(state.hueUpdateTimer); // Clear previous debounce timer
+                updateThemeColors(false); // Update CSS vars immediately (no dot update yet)
+
+                // Debounce the full theme update (including dots and effect restart if needed)
+                state.hueUpdateTimer = setTimeout(() => {
+                    updateThemeColors(true); // Update dots now
+                    // Restart effect only if needed (e.g., saturated theme dots change appearance)
+                    if (state.masterMode === 'activated' && state.currentTheme === 'saturated') {
+                        startCurrentEffect();
+                    }
+                }, config.HUE_UPDATE_DEBOUNCE); // Uses slowed debounce time
+            }
+        }
+        // Animates the 'GRAD' property of the hue slider thumb icon
+        function animateHueIconGrade(targetGrade) { // Uses slowed config values
+             if (!domRefs.thumbIcon) return;
+             const iconAnimDuration = getCssVarAsNumber('--gsap-slider-icon-duration') || 0.2;
+             const iconAnimEase = getComputedStyle(document.documentElement).getPropertyValue('--gsap-slider-icon-ease').trim() || 'power1.out';
+
+             gsap.killTweensOf(domRefs.thumbIcon, { targets: '--slider-thumb-icon-grad', overwrite: true });
+             gsap.to(domRefs.thumbIcon, { '--slider-thumb-icon-grad': targetGrade, duration: iconAnimDuration, ease: iconAnimEase });
+        }
+        // Handles start of drag (mousedown/touchstart) on hue slider thumb or track
+        function handleHueSliderStart(event) {
+            if (state.masterMode === 'sleep') return;
+            event.preventDefault(); event.stopPropagation(); // Prevent text selection/scrolling
+
+            state.isDraggingHueSlider = true;
+            state.hueSliderTrackRect = domRefs.hueTrack.getBoundingClientRect(); // Cache rect on drag start
+            domRefs.hueThumbContainer.style.cursor = 'pointer'; // Ensure grab cursor
+            document.body.style.cursor = 'pointer'; // Change body cursor during drag
+
+            // Hide hover line immediately
+            if (domRefs.hueHoverLine) { gsap.to(domRefs.hueHoverLine, { opacity: 0, duration: 0.1, overwrite: true }); }
+
+            const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+            const { percent, value } = calculateHueSliderState(clientX);
+            state.initialHueOnDragStart = state.brandHue; // Store initial hue for logging change
+
+            // If click was on track (not thumb), animate thumb to position
+            const isTrackClick = event.target === domRefs.hueTrack;
+            setHueSliderPosition(percent, value, isTrackClick);
+
+            // Add move/end listeners to the document
+            document.addEventListener('mousemove', handleHueSliderMove);
+            document.addEventListener('touchmove', handleHueSliderMove, { passive: false });
+            document.addEventListener('mouseup', handleHueSliderEnd);
+            document.addEventListener('touchend', handleHueSliderEnd);
+            document.addEventListener('mouseleave', handleHueSliderMouseLeave); // Handle mouse leaving window during drag
+        }
+        // Handles move events (mousemove/touchmove) during hue slider drag
+        function handleHueSliderMove(event) {
+            if (!state.isDraggingHueSlider || state.masterMode === 'sleep') return;
+            if (event.type === 'touchmove') event.preventDefault(); // Prevent scroll on touchmove
+
+            const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+            const { percent, value } = calculateHueSliderState(clientX);
+            setHueSliderPosition(percent, value, false); // Update position without animation
+        }
+         // Handles end of drag (mouseup/touchend) for hue slider
+         function handleHueSliderEnd(event) { // Uses slowed config values for animations
+            if (state.isDraggingHueSlider) {
+                // Log hue change if significant
+                const finalHue = state.brandHue;
+                const initialHue = state.initialHueOnDragStart;
+                logHueChange(initialHue, finalHue);
+
+                state.isDraggingHueSlider = false;
+                domRefs.hueThumbContainer.style.cursor = 'pointer'; // Reset cursor
+                document.body.style.cursor = ''; // Reset body cursor
+
+                // Check if mouse/touch ended *outside* the slider container
+                const containerRect = domRefs.hueSliderContainer.getBoundingClientRect();
+                const clientX = event.changedTouches ? event.changedTouches[0].clientX : event.clientX;
+                const clientY = event.changedTouches ? event.changedTouches[0].clientY : event.clientY;
+                const isStillOverContainer = clientX >= containerRect.left && clientX <= containerRect.right &&
+                                             clientY >= containerRect.top && clientY <= containerRect.bottom;
+
+                if (!isStillOverContainer) {
+                    // If ended outside, reset icon grade and track mask
+                    const iconDefaultGrade = getCssVarAsNumber('--slider-thumb-icon-grad') || -25;
+                    animateHueIconGrade(iconDefaultGrade);
+                    gsap.to(domRefs.hueTrack, {
+                        '--slider-mask-height-factor': 1, // Restore mask
+                        boxShadow: 'var(--slider-track-inset-shadow)', // Restore shadow
+                        duration: getCssVarAsNumber('--gsap-slider-track-leave-duration') || 0.2,
+                        ease: getComputedStyle(document.documentElement).getPropertyValue('--gsap-slider-track-leave-ease').trim() || 'power2.out',
+                        overwrite: true
+                    });
+                    // Hide hover line
+                    if (domRefs.hueHoverLine) { gsap.to(domRefs.hueHoverLine, { opacity: 0, duration: 0.2, /* Slowed */ overwrite: true }); }
+                } else {
+                    // If ended inside, update hover line position and ensure it's visible
+                    handleHueContainerMove(event); // Update line position
+                    if (domRefs.hueHoverLine) { gsap.to(domRefs.hueHoverLine, { opacity: 1, duration: 0.2, /* Slowed */ overwrite: true }); }
+                }
+
+                // Remove document listeners
+                document.removeEventListener('mousemove', handleHueSliderMove);
+                document.removeEventListener('touchmove', handleHueSliderMove);
+                document.removeEventListener('mouseup', handleHueSliderEnd);
+                document.removeEventListener('touchend', handleHueSliderEnd);
+                document.removeEventListener('mouseleave', handleHueSliderMouseLeave);
+            }
+        }
+        // Handles mouse leaving the window during a drag
+        function handleHueSliderMouseLeave(event) {
+            // If dragging and mouse leaves the viewport entirely
+            if (state.isDraggingHueSlider && (!event.relatedTarget || event.relatedTarget.nodeName === 'HTML')) {
+                handleHueSliderEnd(event); // Treat as drag end
+            }
+        }
+        // Handles mouse entering the hue slider container (not dragging)
+        function handleHueContainerHover(event) { // Uses slowed config values
+            if (state.masterMode === 'sleep' || state.isDraggingHueSlider) return;
+            // Show and position hover line
+            if (domRefs.hueHoverLine) {
+                gsap.to(domRefs.hueHoverLine, { opacity: 1, duration: 0.2, /* Slowed */ overwrite: true });
+                handleHueContainerMove(event); // Position line immediately
+            }
+        }
+        // Handles mouse moving within the hue slider container (not dragging)
+        function handleHueContainerMove(event) {
+            if (state.masterMode === 'sleep' || state.isDraggingHueSlider || !domRefs.hueHoverLine) return;
+
+            // Ensure track rect is cached
+            if (!state.hueSliderTrackRect) { state.hueSliderTrackRect = domRefs.hueTrack.getBoundingClientRect(); }
+            if (!state.hueSliderTrackRect || state.hueSliderTrackRect.width <= 0) { return; } // Exit if invalid
+
+            // Calculate position and update hover line
+            const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+            let positionX = clientX - state.hueSliderTrackRect.left;
+            positionX = clamp(positionX, 0, state.hueSliderTrackRect.width);
+            gsap.set(domRefs.hueHoverLine, { left: `${positionX}px` });
+        }
+        // Handles mouse leaving the hue slider container (not dragging)
+        function handleHueContainerLeave(event) { // Uses slowed config values
+            if (state.masterMode === 'sleep' || state.isDraggingHueSlider) return;
+            // Hide hover line
+            if (domRefs.hueHoverLine) {
+                gsap.to(domRefs.hueHoverLine, { opacity: 0, duration: 0.2, /* Slowed */ overwrite: true });
+            }
+        }
+        // Handles click events directly on the hue slider container (track area)
+        function handleHueContainerClick(event) {
+            if (state.masterMode === 'sleep' || state.isDraggingHueSlider) return;
+            // Ignore clicks on the thumb itself (handled by drag start)
+            if (domRefs.hueThumbContainer && domRefs.hueThumbContainer.contains(event.target)) { return; }
+
+            event.stopPropagation(); // Prevent triggering other listeners if needed
+            const initialHue = state.brandHue;
+            const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+            const { percent, value } = calculateHueSliderState(clientX);
+
+            setHueSliderPosition(percent, value, true); // Animate thumb to clicked position
+            logHueChange(initialHue, value); // Log the change
+        }
+        // Initializes the hue slider interactions and hover effects
+        function initializeHueSlider() { // Uses slowed config values for hover animations
+            if (!domRefs.hueSliderContainer || !domRefs.hueTrack || !domRefs.hueThumbContainer || !domRefs.thumbIcon || !domRefs.hueHoverLine) { console.error("initializeHueSlider: Missing required DOM elements."); return; }
+
+            // Set initial position
+            const initialPercent = (state.brandHue / 360) * 100;
+            setHueSliderPosition(initialPercent, state.brandHue, false);
+
+            // Add drag start listeners
+            domRefs.hueThumbContainer.addEventListener('mousedown', handleHueSliderStart);
+            domRefs.hueThumbContainer.addEventListener('touchstart', handleHueSliderStart, { passive: false });
+            domRefs.hueTrack.addEventListener('mousedown', handleHueSliderStart); // Allow dragging track too
+            domRefs.hueTrack.addEventListener('touchstart', handleHueSliderStart, { passive: false });
+
+            // Add hover listeners for the container
+            domRefs.hueSliderContainer.addEventListener('mouseenter', handleHueContainerHover);
+            domRefs.hueSliderContainer.addEventListener('mousemove', handleHueContainerMove);
+            domRefs.hueSliderContainer.addEventListener('mouseleave', handleHueContainerLeave);
+
+            // Add click listener for the container (track clicks)
+            domRefs.hueSliderContainer.addEventListener('mousedown', handleHueContainerClick);
+            domRefs.hueSliderContainer.addEventListener('touchstart', handleHueContainerClick, { passive: true }); // Use passive for potential scroll
+
+            // Get icon grades and track animation parameters from CSS vars
+            const iconDefaultGrade = getCssVarAsNumber('--slider-thumb-icon-grad') || -25;
+            const iconHoverGrade = 200; // Target grade for hover
+            const trackEnterDuration = getCssVarAsNumber('--gsap-slider-track-enter-duration') || 0.2;
+            const trackLeaveDuration = getCssVarAsNumber('--gsap-slider-track-leave-duration') || 0.2;
+            const trackLeaveEase = getComputedStyle(document.documentElement).getPropertyValue('--gsap-slider-track-leave-ease').trim() || 'power2.out';
+            const trackEnterEase = getComputedStyle(document.documentElement).getPropertyValue('--gsap-slider-track-leave-ease').trim() || 'power2.out'; // Assuming same ease for enter
+
+            // Animate icon grade and track mask/shadow on container hover (if not sleeping/dragging)
+            domRefs.hueSliderContainer.addEventListener('mouseenter', () => {
+                if (state.masterMode !== 'sleep' && !state.isDraggingHueSlider) {
+                    animateHueIconGrade(iconHoverGrade); // Animate icon
+                    gsap.to(domRefs.hueTrack, { // Reveal full track height
+                        boxShadow: 'none', // Remove inset shadow
+                        '--slider-mask-height-factor': 0, // Remove mask
+                        duration: trackEnterDuration, ease: trackEnterEase, overwrite: true
+                    });
+                }
+            });
+            domRefs.hueSliderContainer.addEventListener('mouseleave', () => {
+                if (state.masterMode !== 'sleep' && !state.isDraggingHueSlider) {
+                    animateHueIconGrade(iconDefaultGrade); // Reset icon
+                    gsap.to(domRefs.hueTrack, { // Restore masked appearance
+                        '--slider-mask-height-factor': 1, // Restore mask
+                        boxShadow: 'var(--slider-track-inset-shadow)', // Restore shadow
+                        duration: trackLeaveDuration, ease: trackLeaveEase, overwrite: true
+                    });
+                }
+            });
+
+            // Add listeners to invalidate cached track rect on resize/orientation change
+            window.addEventListener('resize', () => { state.hueSliderTrackRect = null; });
+            window.addEventListener('orientationchange', () => { state.hueSliderTrackRect = null; });
+
+            console.log("Hue Slider Initialized.");
+        }
+
+        // ==========================================================================
+        // 15. Event Listener Setup
+        // ==========================================================================
+        // Sets up all primary event listeners for controls and interactions
+        function setupEventListeners() { // Uses slowed resize timer
+            // Check for required DOM references before adding listeners
+            const requiredRefs = ['effectTypeToggle', 'hoverTypeToggle', 'tapButton', 'jiggleButton', 'waveTapButton', 'svgElement', 'masterToggle', 'themeToggle', 'masterTitle', 'consolePanel', 'masterPanelWrapper', 'footerContainer', 'footerCredit'];
+            for (const refName of requiredRefs) {
+                if (!domRefs[refName]) { throw new Error(`Listener setup fail: Missing '${refName}'!`); }
+            }
+
+            // --- Dial Drag Logic ---
+            const handleDialMouseDown = (e) => {
+                if (state.masterMode === 'sleep') return; // Ignore if sleeping
+                const dial = e.target.closest('.dial-svg');
+                if (!dial || !dial.dataset.dialId) return; // Ensure click is on a dial SVG
+                // Ignore clicks on hidden dials (relevant for mobile/effect switching)
+                const container = dial.closest('.dial-container');
+                if (container && container.style.display === 'none') return;
+
+                e.preventDefault(); // Prevent default drag behavior
+                const dialId = dial.dataset.dialId;
+                const dConfig = dialConfigs[dialId];
+                if (!dConfig) return; // Exit if no config found
+
+                state.isDraggingDial = true; // Set drag flag
+                state.dragDialInfo.element = dial;
+                state.dragDialInfo.hitMin = false; // Reset hit flags
+                state.dragDialInfo.hitMax = false;
+
+                // Store initial value for logging changes later
+                const indicator = domRefs[`indicator_${dialId}`];
+                if(indicator) {
+                    const transformAttr = indicator.getAttribute('transform');
+                    const initialAngleMatch = transformAttr ? transformAttr.match(/rotate\((.*?)\)/) : null;
+                    const initialAngle = initialAngleMatch ? parseFloat(initialAngleMatch[1]) : 0;
+                    state.dragDialInfo.initialValue = dConfig.fullRange
+                        ? angleToValue360(initialAngle, dConfig.displayMin, dConfig.displayMax)
+                        : angleToValue(initialAngle, dConfig.displayMin, dConfig.displayMax);
+                } else { state.dragDialInfo.initialValue = null; }
+
+                // Get dial center for angle calculation
+                const rect = dial.getBoundingClientRect();
+                state.dragDialInfo.center.x = rect.left + rect.width / 2;
+                state.dragDialInfo.center.y = rect.top + rect.height / 2;
+
+                // Set cursors for drag state
+                dial.style.cursor = 'pointer'; // Use grabbing cursor ideally, pointer is fallback
+                document.body.style.cursor = 'pointer';
+
+                // Add move/end listeners to the document
+                document.addEventListener('mousemove', handleDialMouseMove);
+                document.addEventListener('mouseup', handleDialMouseUp);
+                document.addEventListener('mouseleave', handleDialMouseUp); // End drag if mouse leaves window
+            };
+            const handleDialMouseMove = (e) => {
+                if (state.masterMode === 'sleep' || !state.isDraggingDial || !state.dragDialInfo.element) return;
+                e.preventDefault();
+
+                const dial = state.dragDialInfo.element;
+                const dialId = dial.dataset.dialId;
+                const dConfig = dialConfigs[dialId];
+                if (!dConfig) return;
+
+                // Calculate angle from dial center to mouse position
+                const dx = e.clientX - state.dragDialInfo.center.x;
+                const dy = e.clientY - state.dragDialInfo.center.y;
+                let rawAngleDeg = (radiansToDegrees(Math.atan2(dy, dx)) + 360) % 360;
+
+                // Clamp angle if necessary and update visuals
+                const finalAngle = dConfig.fullRange ? rawAngleDeg : getClampedAngle(rawAngleDeg);
+                const indicator = domRefs[`indicator_${dialId}`];
+                const valueSpan = domRefs[`value_${dialId}`];
+                if (!indicator || !valueSpan) return;
+
+                const displayedValue = updateDialVisuals(dial, indicator, valueSpan, finalAngle, dConfig.formatFn);
+                if (isNaN(displayedValue)) return; // Exit if update failed
+
+                // Update internal state value based on displayed value
+                const internalValue = mapRange(displayedValue, dConfig.displayMin, dConfig.displayMax, dConfig.internalMin, dConfig.internalMax);
+                state[dConfig.stateProp] = internalValue;
+
+                // Track if min/max limits were hit
+                state.dragDialInfo.hitMin = (Math.abs(displayedValue - dConfig.displayMin) < config.EPSILON);
+                state.dragDialInfo.hitMax = (Math.abs(displayedValue - dConfig.displayMax) < config.EPSILON);
+
+                // Trigger updates if needed by the dial config
+                if (dConfig.needsSvgRecalc) setupSvg(); // Recalculate SVG geometry if needed (e.g., falloff change)
+                if (dConfig.needsEffectRestart) startCurrentEffect(); // Restart effect if parameter changed
+            };
+            const handleDialMouseUp = (e) => {
+                if (state.isDraggingDial) {
+                    const dial = state.dragDialInfo.element;
+                    if (dial) {
+                        dial.style.cursor = 'pointer'; // Reset cursor
+                        const dialId = dial.dataset.dialId;
+                        const dConfig = dialConfigs[dialId];
+                        const indicator = domRefs[`indicator_${dialId}`];
+                        const valueSpan = domRefs[`value_${dialId}`];
+                        const labelSpan = dial.closest('.dial-container')?.querySelector('.dial-label');
+
+                        // Log appropriate message based on value change and limits hit
+                        if(dConfig && indicator && valueSpan && labelSpan && state.dragDialInfo.initialValue !== null) {
+                            const transformAttr = indicator.getAttribute('transform');
+                            const finalAngleMatch = transformAttr ? transformAttr.match(/rotate\((.*?)\)/) : null;
+                            const finalAngle = finalAngleMatch ? parseFloat(finalAngleMatch[1]) : 0;
+                            const finalValue = dConfig.fullRange
+                                ? angleToValue360(finalAngle, dConfig.displayMin, dConfig.displayMax)
+                                : angleToValue(finalAngle, dConfig.displayMin, dConfig.displayMax);
+                            const initialValue = state.dragDialInfo.initialValue;
+                            const valueChanged = Math.abs(finalValue - initialValue) > config.EPSILON;
+
+                            if (state.dragDialInfo.hitMax && valueChanged) { logMessage(getNextMessage('dialMax')); }
+                            else if (state.dragDialInfo.hitMin && valueChanged) { logMessage(getNextMessage('dialMin')); }
+                            else if (valueChanged) {
+                                // Specific messages for frequency and direction
+                                if (dialId === 'sparkleFreq') { logMessage(getNextMessage(finalValue > initialValue ? 'dialIncreaseFreq' : 'dialDecreaseFreq')); }
+                                else if (dialId === 'waveDirection') {
+                                    const angle = Math.round(finalValue);
+                                    if (angle >= 15 && angle <= 75) logMessage(getNextMessage('directionEast'));
+                                    else if (angle >= 105 && angle <= 165) logMessage(getNextMessage('directionSouth'));
+                                    else if (angle >= 195 && angle <= 255) logMessage(getNextMessage('directionWest'));
+                                    else if (angle >= 285 && angle <= 345) logMessage(getNextMessage('directionNorth'));
+                                    else logMessage(getNextMessage('directionGeneral'));
+                                }
+                                else { // Generic increase/decrease message
+                                    logMessage(getNextMessage(finalValue > initialValue ? 'dialIncreaseGeneric' : 'dialDecreaseGeneric'));
+                                }
+                            }
+                        }
+                    }
+                    // Clean up drag state
+                    document.body.style.cursor = '';
+                    state.isDraggingDial = false;
+                    state.dragDialInfo.element = null;
+                    state.dragDialInfo.initialValue = null;
+                    state.dragDialInfo.hitMin = false;
+                    state.dragDialInfo.hitMax = false;
+                    document.removeEventListener('mousemove', handleDialMouseMove);
+                    document.removeEventListener('mouseup', handleDialMouseUp);
+                    document.removeEventListener('mouseleave', handleDialMouseUp);
+                 }
+            };
+            // Attach dial listener to the control section container (event delegation)
+            const controlSectionContainer = document.getElementById('control-section');
+            if (controlSectionContainer) controlSectionContainer.addEventListener('mousedown', handleDialMouseDown);
+            else console.error("Cannot find #control-section to attach dial listener");
+            // --- End Dial Drag Logic ---
+
+            // --- Toggle Button Listeners ---
+            domRefs.masterToggle.addEventListener('click', (e) => {
+                const button = e.target.closest('button');
+                if (!button || !button.dataset.masterMode || button.classList.contains('active')) return; // Ignore clicks on active or non-buttons
+                const newValue = button.dataset.masterMode;
+                initializeToggle(domRefs.masterToggle, newValue, 'masterMode'); // Update visuals
+                if (newValue === 'sleep') enterSleepMode(); else enterActivatedMode(); // Change state
+            });
+            domRefs.themeToggle.addEventListener('click', (e) => {
+                if (state.masterMode === 'sleep') return; // Ignore if sleeping
+                const button = e.target.closest('button');
+                if (!button || !button.dataset.theme || button.classList.contains('active')) return;
+                const newValue = button.dataset.theme;
+                initializeToggle(domRefs.themeToggle, newValue, 'theme');
+                const themeMessageKey = themes[newValue]?.messageKey || 'themeLight';
+                logMessage(getNextMessage(themeMessageKey));
+                applyTheme(newValue); // Apply the new theme
+            });
+            domRefs.effectTypeToggle.addEventListener('click', (e) => {
+                if (state.masterMode === 'sleep') return;
+                const button = e.target.closest('button');
+                if (!button || !button.dataset.effectType || button.classList.contains('active')) return;
+                const newValue = button.dataset.effectType;
+                initializeToggle(domRefs.effectTypeToggle, newValue, 'effectType');
+                logMessage(getNextMessage(newValue === 'wave' ? 'effectWave' : 'effectSparkle'));
+                setActiveEffect(newValue); // Change the active effect
+            });
+            domRefs.hoverTypeToggle.addEventListener('click', (e) => {
+                if (state.masterMode === 'sleep') return;
+                const button = e.target.closest('button');
+                if (!button || !button.dataset.hoverType || button.classList.contains('active')) return;
+                const newValue = button.dataset.hoverType;
+                initializeToggle(domRefs.hoverTypeToggle, newValue, 'hoverType');
+                logMessage(getNextMessage(newValue === 'attract' ? 'hoverAttract' : 'hoverRepel'));
+                state.activeHoverMode = newValue; // Update hover mode state
+            });
+
+            // --- Tap Button Listeners ---
+            domRefs.tapButton.addEventListener('click', triggerPopEffect);
+            domRefs.jiggleButton.addEventListener('click', triggerShakeEffect);
+            domRefs.waveTapButton.addEventListener('click', triggerPulseEffect);
+
+            // --- SVG Interaction Listeners ---
+            domRefs.svgElement.addEventListener('mouseenter', handleMouseEnter);
+            domRefs.svgElement.addEventListener('mouseleave', handleMouseLeave);
+            domRefs.svgElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+            domRefs.svgElement.addEventListener('click', handleSvgClick); // For point pop effect
+
+            // --- Window Listeners ---
+            // Debounced resize handler
+            window.addEventListener('resize', () => {
+                clearTimeout(state.resizeTimer);
+                state.resizeTimer = setTimeout(() => {
+                    setupSvg(); // Recalculate SVG geometry
+                    state.hueSliderTrackRect = null; // Invalidate cached slider rect
+                }, 500); /* Doubled delay */
+            });
+            // Invalidate slider rect on orientation change
+            window.addEventListener('orientationchange', () => {
+                state.hueSliderTrackRect = null;
+            });
+        }
+
+        // ==========================================================================
+        // 16. Initialization Execution
+        // ==========================================================================
+        function main() {
+            console.log("Initializing Application (v101 Slower Special)...");
+            try {
+                // Check dependencies
+                if (typeof gsap === 'undefined') throw new Error("GSAP library is not loaded!");
+                if (!gsap.plugins.text) throw new Error("GSAP TextPlugin is not loaded!");
+
+                // Initialize core components
+                if (!populateDomRefs()) throw new Error("Failed to populate critical DOM references.");
+                setupSvg();
+                initializeControls(); // Initializes dials, toggles, applies initial theme CSS
+                initializeHueSlider();
+                setupEventListeners();
+
+                // Short delay before initial state setup/animation to ensure rendering
+                setTimeout(() => {
+                     // Check initial master mode state (could be pre-set)
+                     if (state.masterMode === 'sleep') {
+                         logMessage(getNextMessage('sleep'));
+                         setSleepDimmedState(true);
+                         initializeToggle(domRefs.masterToggle, state.masterMode, 'masterMode');
+                         // Put dots into sleep state visually
+                         if (gsap && state.dots.length > 0) {
+                             const sleepColor = getComputedStyle(document.documentElement).getPropertyValue('--dot-sleep-color').trim() || '#B3BFCD';
+                             const dotElementsToSleep = state.dots.map(d => d?.el).filter(el => el instanceof SVGElement);
+                             if (dotElementsToSleep.length > 0) {
+                                 gsap.to(dotElementsToSleep, { duration: 1.0, /* Slowed */ attr: { r: 1, cy: geometry.gridCenter.y }, fill: sleepColor, overwrite: true, stagger: 0.004 /* Slowed */ });
+                             }
+                             state.dots.forEach(d => { if(d) d.currentFill = sleepColor; }); // Update internal state
+                         }
+                     } else { // Start in activated mode
+                         logMessage(getNextMessage('startup'));
+                         setSleepDimmedState(false);
+                         initializeToggle(domRefs.masterToggle, state.masterMode, 'masterMode');
+                         startIntroAnimation(); // Start the activation animation
+                     }
+                     // Ensure initial console text color matches theme
+                     const consoleColor = getComputedStyle(document.documentElement).getPropertyValue('--console-text-color').trim();
+                     if(domRefs.messageBoxContent) domRefs.messageBoxContent.style.color = consoleColor;
+                }, 50); // Small delay
+
+            } catch (error) {
+                // Display error message if initialization fails critically
+                console.error("=== INITIALIZATION FAILED ===", error);
+                document.body.innerHTML = `<div style="color: red; border: 0.125rem solid red; padding: 1.25rem; font-family: sans-serif; margin: 1.25rem; background-color: #fee;"><h2>Initialization Error</h2><p>The interactive grid could not be started. Please check the browser console (F12) for more details.</p><p><strong>Error:</strong> ${error.message}</p></div>`;
+            }
+        }
+
+        // --- Start the application ---
+        // Wait for DOM content to be loaded if script runs early, otherwise run immediately
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', main);
+        } else {
+            main();
+        }
+
+    })(); // End of IIFE
+    </script>
+</body>
+</html>
